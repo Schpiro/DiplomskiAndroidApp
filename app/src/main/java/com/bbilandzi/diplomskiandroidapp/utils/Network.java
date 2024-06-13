@@ -1,7 +1,10 @@
-package com.bbilandzi.diplomskiandroidapp;
+package com.bbilandzi.diplomskiandroidapp.utils;
 
 import android.content.Context;
 import android.util.Log;
+
+import com.bbilandzi.diplomskiandroidapp.R;
+import com.bbilandzi.diplomskiandroidapp.repository.AuthRepository;
 
 import java.io.InputStream;
 import java.security.KeyManagementException;
@@ -13,37 +16,60 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
+import javax.inject.Singleton;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
+import dagger.Module;
+import dagger.Provides;
+import dagger.hilt.InstallIn;
+import dagger.hilt.android.qualifiers.ApplicationContext;
+import dagger.hilt.components.SingletonComponent;
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+@Module
+@InstallIn(SingletonComponent.class)
 public class Network {
-    private static final String BASE_URL = "https://192.168.1.88:8081/";
-    private static final String PASSWORD = "]Bw[=.^s=&`zd=Id>C~C@brT";
+    private static final String BASE_URL = "http://192.168.1.68:8081/";
 
     private static Retrofit retrofit = null;
 
-    public static Retrofit getClient(Context context) {
+    @Provides
+    @Singleton
+    public Retrofit getClient(@ApplicationContext Context context) {
         if (retrofit == null) {
-            OkHttpClient client = createOkHttpClient(context);
 
+            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .addInterceptor(logging)
+                    .followRedirects(true)
+                    .followSslRedirects(true)
+                    .build();
+
+            //OkHttpClient client = createOkHttpClient(context);
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
-                    .client(client) // Use the custom OkHttpClient
+                    .client(client)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
         return retrofit;
     }
 
+    @Provides
+    @Singleton
+    public AuthRepository getUserRepository(Retrofit client) {
+        return new AuthRepository(client);
+    }
 
-    public static OkHttpClient createOkHttpClient(Context context) {
+    private static OkHttpClient createOkHttpClient(Context context) {
         OkHttpClient.Builder client = new OkHttpClient.Builder();
 
         SSLSocketFactory sslSocketFactory = getTrustAllHostsSSLSocketFactory();
@@ -52,7 +78,7 @@ public class Network {
         }
 
         try {
-            SSLContext sslContext = getSslContextForCertificateFile(context, "certificate2.crt");
+            SSLContext sslContext = getSslContextForCertificateFile(context);
             client.sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) trustManagerFactory.getTrustManagers()[0]);
         } catch (Exception e) {
             e.printStackTrace();
@@ -85,10 +111,10 @@ public class Network {
             e.printStackTrace();
         }
     }
-    public static SSLContext getSslContextForCertificateFile(Context context, String fileName) {
+    private static SSLContext getSslContextForCertificateFile(Context context) {
         try {
             System.setProperty("javax.net.debug", "all");
-            KeyStore keyStore = getKeyStore(context, fileName);
+            KeyStore keyStore = getKeyStore(context);
             SSLContext sslContext = SSLContext.getInstance("SSL");
             TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
             trustManagerFactory.init(keyStore);
@@ -101,7 +127,7 @@ public class Network {
         }
     }
 
-    private static KeyStore getKeyStore(Context context, String fileName) {
+    private static KeyStore getKeyStore(Context context) {
         KeyStore keyStore = null;
         try {
             InputStream caInput = context.getResources().openRawResource(R.raw.certificate2);
@@ -124,7 +150,7 @@ public class Network {
         return keyStore;
     }
 
-    public static SSLSocketFactory getTrustAllHostsSSLSocketFactory() {
+    private static SSLSocketFactory getTrustAllHostsSSLSocketFactory() {
         try {
             // Create a trust manager that does not validate certificate chains
             TrustManager[] trustAllCerts = new TrustManager[]{
@@ -141,10 +167,8 @@ public class Network {
                     }
             };
 
-            // Install the all-trusting trust manager
             SSLContext sslContext = SSLContext.getInstance("SSL");
             sslContext.init(null, trustAllCerts, new SecureRandom());
-            // Create an ssl socket factory with our all-trusting manager
             return sslContext.getSocketFactory();
         } catch (NoSuchAlgorithmException | KeyManagementException e) {
             throw new RuntimeException(e);

@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.hiltAndroid)
 }
 
 android {
@@ -37,4 +38,8 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.logging.interceptor)
     implementation(libs.converter.gson)
+    implementation(libs.hilt.android)
+    implementation(libs.annotation)
+    annotationProcessor(libs.hilt.android.compiler)
+    compileOnly(libs.android)
 }

@@ -1,6 +1,6 @@
 package com.bbilandzi.diplomskiandroidapp.model;
 
-public class LoginResponse {
+public class AuthResponse {
     private String jwt;
 
     public String getJwt() {

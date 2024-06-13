@@ -1,10 +1,10 @@
 package com.bbilandzi.diplomskiandroidapp.model;
 
-public class LoginRequest {
+public class AuthRequest {
     private String username;
     private String password;
 
-    public LoginRequest(String username, String password) {
+    public AuthRequest(String username, String password) {
         this.username = username;
         this.password = password;
     }
