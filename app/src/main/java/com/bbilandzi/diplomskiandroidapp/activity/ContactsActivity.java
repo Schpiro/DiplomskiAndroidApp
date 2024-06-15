@@ -2,10 +2,8 @@ package com.bbilandzi.diplomskiandroidapp.activity;
 
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -88,20 +86,4 @@ public class ContactsActivity extends AppCompatActivity {
             usersContainer.addView(textView);
         }
     }
-
-    private View createDivider() {
-        View divider = new View(this);
-        divider.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                dpToPx(1) // Height of the divider line in pixels or dp
-        ));
-        divider.setBackgroundColor(Color.GRAY); // Color of the divider line
-        return divider;
-    }
-
-    private int dpToPx(int dp) {
-        float density = getResources().getDisplayMetrics().density;
-        return Math.round((float) dp * density);
-    }
-
 }
