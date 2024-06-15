@@ -16,6 +16,12 @@ public class AuthUtils {
         return token != null && !token.isEmpty();
     }
 
+    public static String getToken(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String token = prefs.getString(KEY_JWT, null);
+        return token;
+    }
+
     public static void saveToken(Context context, String token) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();

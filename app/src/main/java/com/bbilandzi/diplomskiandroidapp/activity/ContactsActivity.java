@@ -1,26 +1,64 @@
 package com.bbilandzi.diplomskiandroidapp.activity;
 
+
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.bbilandzi.diplomskiandroidapp.R;
+import com.bbilandzi.diplomskiandroidapp.model.UserDTO;
 import com.bbilandzi.diplomskiandroidapp.utils.AuthUtils;
+import com.bbilandzi.diplomskiandroidapp.viewmodel.ContactViewModel;
+
+import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class ContactsActivity extends AppCompatActivity {
+    ContactViewModel contactViewModel;
+    private LinearLayout usersContainer;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.contacts);
+        setContentView(R.layout.activity_contacts);
 
-        Button loginButton = findViewById(R.id.logout);
+        contactViewModel = new ViewModelProvider(this).get(ContactViewModel.class);
 
-        loginButton.setOnClickListener(v -> logout());
+        // Initialize UI components
+        usersContainer = findViewById(R.id.usersContainer);
+
+        // Observe changes in fetched users
+        // Update UI with fetched users
+        contactViewModel.getFetchedUsers().observe(this, this::displayUsers);
+
+        // Trigger fetching of users
+        contactViewModel.getAllUsers();
+
+        Button logoutButton = findViewById(R.id.logout);
+        logoutButton.setOnClickListener(v -> logout());
+
+        Button getAllUsersButton = findViewById(R.id.button);
+        Button getAllUserGroupsButton = findViewById(R.id.button2);
+        Button getUsersInGroupButton = findViewById(R.id.button3);
+        getAllUsersButton.setOnClickListener(v -> getAllUsers());
+        getAllUserGroupsButton.setOnClickListener(v -> logout());
+        getUsersInGroupButton.setOnClickListener(v -> logout());
+
+    }
+
+    private void getAllUsers() {
+        contactViewModel.getAllUsers();
     }
 
     private void logout() {
@@ -29,4 +67,41 @@ public class ContactsActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+    private void displayUsers(List<UserDTO> users) {
+        usersContainer.removeAllViews();
+
+        LayoutInflater inflater = LayoutInflater.from(this);
+
+        // Add TextViews for each user
+        for (UserDTO user : users) {
+            TextView textView = (TextView) inflater.inflate(R.layout.user_item, usersContainer, false);
+            textView.setText(user.getUsername());
+            textView.setOnClickListener(v -> {
+                // Handle click event to redirect to another activity
+                Intent intent = new Intent(ContactsActivity.this, MessengerActivity.class);
+                intent.putExtra("userId", user.getId()); // Pass user info using Intent extras
+                startActivity(intent);
+            });
+
+            // Add the TextView to the LinearLayout
+            usersContainer.addView(textView);
+        }
+    }
+
+    private View createDivider() {
+        View divider = new View(this);
+        divider.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                dpToPx(1) // Height of the divider line in pixels or dp
+        ));
+        divider.setBackgroundColor(Color.GRAY); // Color of the divider line
+        return divider;
+    }
+
+    private int dpToPx(int dp) {
+        float density = getResources().getDisplayMetrics().density;
+        return Math.round((float) dp * density);
+    }
+
 }

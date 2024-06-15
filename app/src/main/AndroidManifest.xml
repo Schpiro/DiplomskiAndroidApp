@@ -27,6 +27,7 @@
 
         <activity android:name=".activity.AuthActivity" />
         <activity android:name=".activity.ContactsActivity" />
+        <activity android:name=".activity.MessengerActivity" />
     </application>
 
 </manifest>

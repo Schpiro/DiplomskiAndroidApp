@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.bbilandzi.diplomskiandroidapp.R;
 import com.bbilandzi.diplomskiandroidapp.repository.AuthRepository;
+import com.bbilandzi.diplomskiandroidapp.repository.ContactsRepository;
 
 import java.io.InputStream;
 import java.security.KeyManagementException;
@@ -51,6 +52,7 @@ public class Network {
                     .addInterceptor(logging)
                     .followRedirects(true)
                     .followSslRedirects(true)
+                    .addInterceptor(new AuthInterceptor(AuthUtils.getToken(context)))
                     .build();
 
             //OkHttpClient client = createOkHttpClient(context);
@@ -67,6 +69,12 @@ public class Network {
     @Singleton
     public AuthRepository getUserRepository(Retrofit client) {
         return new AuthRepository(client);
+    }
+
+    @Provides
+    @Singleton
+    public ContactsRepository getContactsRepository(Retrofit client) {
+        return new ContactsRepository(client);
     }
 
     private static OkHttpClient createOkHttpClient(Context context) {

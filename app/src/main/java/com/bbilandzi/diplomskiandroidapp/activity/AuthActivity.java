@@ -30,10 +30,10 @@ public class AuthActivity extends AppCompatActivity {
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 
         if (isLogin) {
-            setContentView(R.layout.login);
+            setContentView(R.layout.activity_login);
             setupLoginViews();
         } else {
-            setContentView(R.layout.register);
+            setContentView(R.layout.activity_register);
             setupRegisterViews();
         }
     }
@@ -88,10 +88,10 @@ public class AuthActivity extends AppCompatActivity {
         isLogin = !isLogin;
 
         if (isLogin) {
-            setContentView(R.layout.login);
+            setContentView(R.layout.activity_login);
             setupLoginViews();
         } else {
-            setContentView(R.layout.register);
+            setContentView(R.layout.activity_register);
             setupRegisterViews();
         }
     }
@@ -99,7 +99,6 @@ public class AuthActivity extends AppCompatActivity {
     private void login() {
         authViewModel.login(this, getLoginInfo());
         goToContacts();
-
     }
 
     private void register() {
