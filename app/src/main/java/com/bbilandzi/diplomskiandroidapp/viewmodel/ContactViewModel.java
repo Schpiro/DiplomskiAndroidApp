@@ -23,10 +23,8 @@ import retrofit2.Response;
 
 @HiltViewModel
 public class ContactViewModel extends ViewModel {
-    private ContactsRepository contactsRepository;
-    private MutableLiveData<List<UserDTO>> fetchedUsers = new MutableLiveData<>();
-    private ExecutorService executorService = Executors.newSingleThreadExecutor();
-
+    private final ContactsRepository contactsRepository;
+    private final MutableLiveData<List<UserDTO>> fetchedUsers = new MutableLiveData<>();
 
     @Inject
     public ContactViewModel(ContactsRepository contactsRepository) {

@@ -48,6 +48,8 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.annotation)
     implementation(libs.databinding.runtime)
+    annotationProcessor(libs.lombok)
     annotationProcessor(libs.hilt.android.compiler)
+    compileOnly(libs.lombok)
     compileOnly(libs.android)
 }

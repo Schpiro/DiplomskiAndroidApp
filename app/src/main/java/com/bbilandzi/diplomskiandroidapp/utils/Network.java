@@ -6,6 +6,7 @@ import android.util.Log;
 import com.bbilandzi.diplomskiandroidapp.R;
 import com.bbilandzi.diplomskiandroidapp.repository.AuthRepository;
 import com.bbilandzi.diplomskiandroidapp.repository.ContactsRepository;
+import com.bbilandzi.diplomskiandroidapp.repository.MessageRepository;
 
 import java.io.InputStream;
 import java.security.KeyManagementException;
@@ -75,6 +76,12 @@ public class Network {
     @Singleton
     public ContactsRepository getContactsRepository(Retrofit client) {
         return new ContactsRepository(client);
+    }
+
+    @Provides
+    @Singleton
+    public MessageRepository getMessagesRepository(Retrofit client) {
+        return new MessageRepository(client);
     }
 
     private static OkHttpClient createOkHttpClient(Context context) {
