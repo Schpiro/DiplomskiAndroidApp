@@ -11,8 +11,6 @@ import com.bbilandzi.diplomskiandroidapp.model.UserGroup;
 import com.bbilandzi.diplomskiandroidapp.repository.ContactsRepository;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
 
@@ -25,15 +23,21 @@ import retrofit2.Response;
 public class ContactViewModel extends ViewModel {
     private final ContactsRepository contactsRepository;
     private final MutableLiveData<List<UserDTO>> fetchedUsers = new MutableLiveData<>();
+    private final MutableLiveData<List<UserGroup>> fetchedGroups = new MutableLiveData<>();
 
     @Inject
     public ContactViewModel(ContactsRepository contactsRepository) {
         this.contactsRepository = contactsRepository;
         getAllUsers();
+        getAllUserGroups();
     }
 
     public LiveData<List<UserDTO>> getFetchedUsers() {
         return fetchedUsers;
+    }
+
+    public LiveData<List<UserGroup>> getFetchedGroups() {
+        return fetchedGroups;
     }
 
     public void getAllUsers() {
@@ -44,7 +48,7 @@ public class ContactViewModel extends ViewModel {
             public void onResponse(Call<List<UserDTO>> call, Response<List<UserDTO>> response) {
                 if (response.isSuccessful()) {
                     List<UserDTO> users = response.body();
-                    fetchedUsers.postValue(users); // Update LiveData with fetched data
+                    fetchedUsers.setValue(users);
                     Log.d("Users", users.toString());
                 }
             }
@@ -56,11 +60,23 @@ public class ContactViewModel extends ViewModel {
         });
     }
 
-    public Call<List<UserGroup>> getAllUserGroups() {
-        return contactsRepository.getAllUserGroups();
-    }
+    public void getAllUserGroups() {
+        Call<List<UserGroup>> call = contactsRepository.getAllUserGroups();
 
-    public Call<List<UserDTO>> getAllUsersInGroup(Long id) {
-        return contactsRepository.getAllUsersInGroup(id);
+        call.enqueue(new Callback<List<UserGroup>>() {
+            @Override
+            public void onResponse(Call<List<UserGroup>> call, Response<List<UserGroup>> response) {
+                if (response.isSuccessful()) {
+                    List<UserGroup> groups = response.body();
+                    fetchedGroups.setValue(groups);
+                    Log.d("Groups", groups.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<UserGroup>> call, Throwable throwable) {
+                Log.e("GetAllGroups Error", "Failed: " + throwable.getMessage());
+            }
+        });
     }
 }

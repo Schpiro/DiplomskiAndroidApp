@@ -3,27 +3,21 @@ package com.bbilandzi.diplomskiandroidapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.bbilandzi.diplomskiandroidapp.R;
-import com.bbilandzi.diplomskiandroidapp.model.UserDTO;
+import com.bbilandzi.diplomskiandroidapp.adapter.ViewPagerAdapter;
 import com.bbilandzi.diplomskiandroidapp.utils.AuthUtils;
-import com.bbilandzi.diplomskiandroidapp.viewmodel.ContactViewModel;
-
-import java.util.List;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class ContactsActivity extends AppCompatActivity {
-    ContactViewModel contactViewModel;
-    private LinearLayout usersContainer;
 
 
     @Override
@@ -31,33 +25,24 @@ public class ContactsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts);
 
-        contactViewModel = new ViewModelProvider(this).get(ContactViewModel.class);
+        TabLayout tabLayout = findViewById(R.id.tabLayout);
+        ViewPager2 viewPager = findViewById(R.id.viewPager);
 
-        // Initialize UI components
-        usersContainer = findViewById(R.id.usersContainer);
+        ViewPagerAdapter adapter = new ViewPagerAdapter(this);
+        viewPager.setAdapter(adapter);
 
-        // Observe changes in fetched users
-        // Update UI with fetched users
-        contactViewModel.getFetchedUsers().observe(this, this::displayUsers);
-
-        // Trigger fetching of users
-        contactViewModel.getAllUsers();
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
+            if (position == 0) {
+                tab.setText("Users");
+            } else {
+                tab.setText("Groups");
+            }
+        }).attach();
 
         Button logoutButton = findViewById(R.id.logout);
         logoutButton.setOnClickListener(v -> logout());
-
-        Button getAllUsersButton = findViewById(R.id.button);
-        Button getAllUserGroupsButton = findViewById(R.id.button2);
-        Button getUsersInGroupButton = findViewById(R.id.button3);
-        getAllUsersButton.setOnClickListener(v -> getAllUsers());
-        getAllUserGroupsButton.setOnClickListener(v -> logout());
-        getUsersInGroupButton.setOnClickListener(v -> logout());
-
     }
 
-    private void getAllUsers() {
-        contactViewModel.getAllUsers();
-    }
 
     private void logout() {
         AuthUtils.clearToken(this);
@@ -66,24 +51,5 @@ public class ContactsActivity extends AppCompatActivity {
         finish();
     }
 
-    private void displayUsers(List<UserDTO> users) {
-        usersContainer.removeAllViews();
 
-        LayoutInflater inflater = LayoutInflater.from(this);
-
-        // Add TextViews for each user
-        for (UserDTO user : users) {
-            TextView textView = (TextView) inflater.inflate(R.layout.user_item, usersContainer, false);
-            textView.setText(user.getUsername());
-            textView.setOnClickListener(v -> {
-                // Handle click event to redirect to another activity
-                Intent intent = new Intent(ContactsActivity.this, MessengerActivity.class);
-                intent.putExtra("userId", user.getId()); // Pass user info using Intent extras
-                startActivity(intent);
-            });
-
-            // Add the TextView to the LinearLayout
-            usersContainer.addView(textView);
-        }
-    }
 }

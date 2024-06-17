@@ -19,7 +19,7 @@ public interface MessageService {
     Call<List<MessageDTO>> getConversationWithUser(@Path("id") Long senderId);
 
     @GET("message/group/{id}")
-    Call<List<MessageDTO>> getMessageFromGroup(@Path("id") Long groupId);
+    Call<List<MessageDTO>> getConversationWithGroup(@Path("id") Long groupId);
 
     @POST("message")
     Call<MessageDTO> sendMessage(@Body MessageSend messageSend);

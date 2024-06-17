@@ -1,35 +1,74 @@
-package com.bbilandzi.diplomskiandroidapp.activity;
+package com.bbilandzi.diplomskiandroidapp.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
+import android.view.ViewGroup;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.viewpager2.widget.ViewPager2;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bbilandzi.diplomskiandroidapp.R;
-import com.bbilandzi.diplomskiandroidapp.adapter.ViewPagerAdapter;
-import com.bbilandzi.diplomskiandroidapp.model.MessageDTO;
-import com.bbilandzi.diplomskiandroidapp.model.MessageSend;
-import com.bbilandzi.diplomskiandroidapp.viewmodel.MessageViewModel;
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
+import com.bbilandzi.diplomskiandroidapp.activity.MessengerActivity;
+import com.bbilandzi.diplomskiandroidapp.adapter.UserAdapter;
+import com.bbilandzi.diplomskiandroidapp.model.UserDTO;
+import com.bbilandzi.diplomskiandroidapp.viewmodel.ContactViewModel;
 
 import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class MessengerActivity extends AppCompatActivity {
+public class UserListFragment extends Fragment {
 
-    private LinearLayout messagesContainer;
+    private ContactViewModel contactsViewModel;
+    private RecyclerView recyclerView;
+    private UserAdapter userAdapter;
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_user_list, container, false);
+
+        recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        userAdapter = new UserAdapter(this::onUserClicked);
+        recyclerView.setAdapter(userAdapter);
+
+        contactsViewModel = new ViewModelProvider(this).get(ContactViewModel.class);
+        contactsViewModel.getFetchedUsers().observe(getViewLifecycleOwner(), users -> {
+            if (users != null) {
+                Log.d("UserListFragment", "Users fetched in fragment: " + users.size());
+                updateUsers(users);
+            } else {
+                Log.d("UserListFragment", "No users fetched in fragment");
+            }
+        });
+
+        return view;
+    }
+
+    private void updateUsers(List<UserDTO> users) {
+        userAdapter.setUsers(users);
+        userAdapter.notifyDataSetChanged();
+    }
+
+    private void onUserClicked(UserDTO user) {
+        Intent intent = new Intent(getContext(), MessengerActivity.class);
+        intent.putExtra("recipientId", user.getId());
+        intent.putExtra("recipientType", "user");
+        startActivity(intent);
+    }
+}
+
+    /*
+        private LinearLayout messagesContainer;
     private MessageViewModel messageViewModel;
     private EditText messageInput;
     private ScrollView scrollView;
@@ -43,13 +82,6 @@ public class MessengerActivity extends AppCompatActivity {
         messageViewModel = new ViewModelProvider(this).get(MessageViewModel.class);
 
         recipientId = getIntent().getLongExtra("userId", 0);
-
-
-        // TODO: needs fixing
-        //TabLayout tabLayout = findViewById(R.id.tabLayout);
-        //ViewPager2 viewPager = findViewById(R.id.viewPager);
-        //ViewPagerAdapter adapter = new ViewPagerAdapter(this);
-        //viewPager.setAdapter(adapter);
 
         messagesContainer = findViewById(R.id.messagesContainer);
         messageInput = findViewById(R.id.messageInput);
@@ -68,14 +100,6 @@ public class MessengerActivity extends AppCompatActivity {
             }
             return false;
         });
-
-        /*new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
-            if (position == 0) {
-                tab.setText("Users");
-            } else {
-                tab.setText("Groups");
-            }
-        }).attach();*/
     }
 
     private void displayMessages(List<MessageDTO> messages) {
@@ -114,4 +138,4 @@ public class MessengerActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
-}
+     */

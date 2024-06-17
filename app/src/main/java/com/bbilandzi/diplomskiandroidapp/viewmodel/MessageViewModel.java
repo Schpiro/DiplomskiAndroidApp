@@ -50,7 +50,27 @@ public class MessageViewModel extends ViewModel {
 
             @Override
             public void onFailure(Call<List<MessageDTO>> call, Throwable throwable) {
-                Log.e("GetAllMessages Error", "Failed: " + throwable.getMessage());
+                Log.e("GetConversationWithUser Error", "Failed: " + throwable.getMessage());
+            }
+        });
+    }
+
+    public void getConversationWithGroup(Long groupId) {
+        Call<List<MessageDTO>> call = messageRepository.getConversationWithGroup(groupId);
+
+        call.enqueue(new Callback<List<MessageDTO>>() {
+            @Override
+            public void onResponse(Call<List<MessageDTO>> call, Response<List<MessageDTO>> response) {
+                if (response.isSuccessful()) {
+                    List<MessageDTO> message = response.body();
+                    fetchedMessages.postValue(message);
+                    Log.d("Messages", message.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<MessageDTO>> call, Throwable throwable) {
+                Log.e("getConversationWithGroup Error", "Failed: " + throwable.getMessage());
             }
         });
     }

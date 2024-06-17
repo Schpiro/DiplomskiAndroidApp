@@ -28,8 +28,8 @@ public class MessageRepository {
         return messageService.getConversationWithUser(senderId);
     }
 
-    public Call<List<MessageDTO>> getMessageFromGroup(Long groupId) {
-        return messageService.getMessageFromGroup(groupId);
+    public Call<List<MessageDTO>> getConversationWithGroup(Long groupId) {
+        return messageService.getConversationWithGroup(groupId);
     }
 
     public Call<MessageDTO> sendMessage(MessageSend messageSend) {
