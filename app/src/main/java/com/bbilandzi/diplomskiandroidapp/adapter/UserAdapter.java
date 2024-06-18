@@ -10,17 +10,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bbilandzi.diplomskiandroidapp.R;
 import com.bbilandzi.diplomskiandroidapp.model.UserDTO;
+import com.bbilandzi.diplomskiandroidapp.model.UserGroup;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> {
-    private List<UserDTO> users = new ArrayList<>();
-    private final OnUserClickListener onUserClickListener;
 
-    public UserAdapter(OnUserClickListener onUserClickListener) {
-        this.onUserClickListener = onUserClickListener;
-    }
+    private List<UserDTO> users = new ArrayList<>();
 
     public void setUsers(List<UserDTO> users) {
         this.users = users;
@@ -31,7 +28,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     @Override
     public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_user, parent, false);
-        return new UserViewHolder(view, onUserClickListener);
+        return new UserViewHolder(view);
     }
 
     @Override
@@ -45,23 +42,17 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         return users.size();
     }
 
-    static class UserViewHolder extends RecyclerView.ViewHolder {
-        private final TextView userNameTextView;
-        private final OnUserClickListener onUserClickListener;
+    public static class UserViewHolder extends RecyclerView.ViewHolder {
 
-        public UserViewHolder(@NonNull View itemView, OnUserClickListener onUserClickListener) {
+        private TextView textViewName;
+
+        public UserViewHolder(@NonNull View itemView) {
             super(itemView);
-            userNameTextView = itemView.findViewById(R.id.username);
-            this.onUserClickListener = onUserClickListener;
+            textViewName = itemView.findViewById(R.id.text_view_user_name);
         }
 
         public void bind(UserDTO user) {
-            userNameTextView.setText(user.getUsername());
-            itemView.setOnClickListener(v -> onUserClickListener.onUserClick(user));
+            textViewName.setText(user.getUsername());
         }
-    }
-
-    public interface OnUserClickListener {
-        void onUserClick(UserDTO user);
     }
 }

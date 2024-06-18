@@ -5,27 +5,30 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.bbilandzi.diplomskiandroidapp.fragments.UserListFragment;
-import com.bbilandzi.diplomskiandroidapp.fragments.GroupListFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ViewPagerAdapter extends FragmentStateAdapter {
+
+    private final List<Fragment> fragments = new ArrayList<>();
 
     public ViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
     }
 
+    public void addFragment(Fragment fragment) {
+        fragments.add(fragment);
+    }
+
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        if (position == 0) {
-            return new UserListFragment();
-        } else {
-            return new GroupListFragment();
-        }
+        return fragments.get(position);
     }
 
     @Override
     public int getItemCount() {
-        return 2; // Number of tabs
+        return fragments.size();
     }
 }

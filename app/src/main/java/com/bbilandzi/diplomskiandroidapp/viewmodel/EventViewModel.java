@@ -13,6 +13,7 @@ import com.bbilandzi.diplomskiandroidapp.model.CommentDTO;
 import com.bbilandzi.diplomskiandroidapp.model.EventDTO;
 import com.bbilandzi.diplomskiandroidapp.model.WebsocketMessageDTO;
 import com.bbilandzi.diplomskiandroidapp.repository.EventRepository;
+import com.bbilandzi.diplomskiandroidapp.utils.DateTimeUtil;
 import com.bbilandzi.diplomskiandroidapp.utils.WebSocketManager;
 import com.google.gson.Gson;
 
@@ -61,6 +62,7 @@ public class EventViewModel extends ViewModel {
             public void onResponse(Call<List<EventDTO>> call, Response<List<EventDTO>> response) {
                 if (response.isSuccessful()) {
                     List<EventDTO> events = response.body();
+                    events.sort(DateTimeUtil.eventDateComparator());
                     eventsLiveData.setValue(events);
                     originalEvents.clear();
                     originalEvents.addAll(events);

@@ -21,9 +21,9 @@ import retrofit2.Response;
 
 @HiltViewModel
 public class ContactViewModel extends ViewModel {
-    private final ContactsRepository contactsRepository;
-    private final MutableLiveData<List<UserDTO>> fetchedUsers = new MutableLiveData<>();
-    private final MutableLiveData<List<UserGroup>> fetchedGroups = new MutableLiveData<>();
+    private ContactsRepository contactsRepository;
+    private MutableLiveData<List<UserDTO>> fetchedUsers = new MutableLiveData<>();
+    private MutableLiveData<List<UserGroup>> fetchedGroups = new MutableLiveData<>();
 
     @Inject
     public ContactViewModel(ContactsRepository contactsRepository) {
@@ -45,13 +45,13 @@ public class ContactViewModel extends ViewModel {
                 if (response.isSuccessful()) {
                     List<UserDTO> users = response.body();
                     fetchedUsers.setValue(users);
-                    Log.d("Users", users.toString());
+                    Log.d("ContactViewModel", users.toString());
                 }
             }
 
             @Override
             public void onFailure(Call<List<UserDTO>> call, Throwable throwable) {
-                Log.e("GetAllUsers Error", "Failed: " + throwable.getMessage());
+                Log.e("ContactViewModel Error", "Failed: " + throwable.getMessage());
             }
         });
     }
@@ -63,13 +63,13 @@ public class ContactViewModel extends ViewModel {
                 if (response.isSuccessful()) {
                     List<UserGroup> groups = response.body();
                     fetchedGroups.setValue(groups);
-                    Log.d("Groups", groups.toString());
+                    Log.d("ContactViewModel", groups.toString());
                 }
             }
 
             @Override
             public void onFailure(Call<List<UserGroup>> call, Throwable throwable) {
-                Log.e("GetAllGroups Error", "Failed: " + throwable.getMessage());
+                Log.e("ContactViewModel Error", "Failed: " + throwable.getMessage());
             }
         });
     }

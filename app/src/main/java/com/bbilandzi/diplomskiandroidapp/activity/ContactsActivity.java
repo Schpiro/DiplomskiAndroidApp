@@ -10,6 +10,8 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.bbilandzi.diplomskiandroidapp.R;
 import com.bbilandzi.diplomskiandroidapp.adapter.ViewPagerAdapter;
+import com.bbilandzi.diplomskiandroidapp.fragments.GroupListFragment;
+import com.bbilandzi.diplomskiandroidapp.fragments.UserListFragment;
 import com.bbilandzi.diplomskiandroidapp.utils.AuthUtils;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -25,19 +27,13 @@ public class ContactsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts);
 
+        ViewPager2 viewPager = findViewById(R.id.view_pager);
+        setupViewPager(viewPager);
+
         TabLayout tabLayout = findViewById(R.id.tabLayout);
-        ViewPager2 viewPager = findViewById(R.id.viewPager);
-
-        ViewPagerAdapter adapter = new ViewPagerAdapter(this);
-        viewPager.setAdapter(adapter);
-
-        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
-            if (position == 0) {
-                tab.setText("Users");
-            } else {
-                tab.setText("Groups");
-            }
-        }).attach();
+        new TabLayoutMediator(tabLayout, viewPager,
+                (tab, position) -> tab.setText(position == 0 ? "Users" : "Groups")
+        ).attach();
 
         Button logoutButton = findViewById(R.id.logout);
         logoutButton.setOnClickListener(v -> logout());
@@ -47,6 +43,13 @@ public class ContactsActivity extends AppCompatActivity {
             Intent intent = new Intent(this, EventListActivity.class);
             startActivity(intent);
         });
+    }
+
+    private void setupViewPager(ViewPager2 viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(this);
+        adapter.addFragment(new UserListFragment());
+        adapter.addFragment(new GroupListFragment());
+        viewPager.setAdapter(adapter);
     }
 
 

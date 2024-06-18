@@ -1,9 +1,11 @@
 package com.bbilandzi.diplomskiandroidapp.adapter;
 
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -66,7 +68,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         private LinearLayout layoutDetails;
         private TextView eventCreatorTextView;
         private TextView eventDetailsTextView;
-        private Button openCommentsButton;
+        private ImageButton openCommentsButton;
 
         public EventViewHolder(@NonNull View itemView) {
             super(itemView);

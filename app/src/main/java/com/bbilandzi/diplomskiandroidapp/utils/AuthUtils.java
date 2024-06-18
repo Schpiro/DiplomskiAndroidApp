@@ -7,6 +7,7 @@ import android.util.Log;
 
 import java.io.UnsupportedEncodingException;
 import java.time.Instant;
+import java.util.Date;
 
 public class AuthUtils {
     private static final String PREFS_NAME = "AuthPrefs";
@@ -20,7 +21,7 @@ public class AuthUtils {
 
         long exp = Long.parseLong(extractClaim(getToken(context),"exp"));
 
-        return exp>Instant.now().toEpochMilli();
+        return Instant.ofEpochSecond(exp).toEpochMilli()>Instant.now().toEpochMilli();
     }
 
     public static String getToken(Context context) {
