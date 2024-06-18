@@ -176,7 +176,7 @@ public class EventViewModel extends ViewModel {
     }
 
     private void onNewEventReceived(WebsocketMessageDTO message) {
-        EventDTO newEvent = gson.fromJson((String) message.getPayload(), EventDTO.class);
+        EventDTO newEvent = gson.fromJson(gson.toJson(message.getPayload()), EventDTO.class);
         List<EventDTO> currentList = eventsLiveData.getValue();
         if (currentList == null) {
             currentList = new ArrayList<>();
