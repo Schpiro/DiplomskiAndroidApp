@@ -28,8 +28,6 @@ public class ContactViewModel extends ViewModel {
     @Inject
     public ContactViewModel(ContactsRepository contactsRepository) {
         this.contactsRepository = contactsRepository;
-        getAllUsers();
-        getAllUserGroups();
     }
 
     public LiveData<List<UserDTO>> getFetchedUsers() {
@@ -41,9 +39,7 @@ public class ContactViewModel extends ViewModel {
     }
 
     public void getAllUsers() {
-        Call<List<UserDTO>> call = contactsRepository.getAllUsers();
-
-        call.enqueue(new Callback<List<UserDTO>>() {
+        contactsRepository.getAllUsers().enqueue(new Callback<List<UserDTO>>() {
             @Override
             public void onResponse(Call<List<UserDTO>> call, Response<List<UserDTO>> response) {
                 if (response.isSuccessful()) {
@@ -61,9 +57,7 @@ public class ContactViewModel extends ViewModel {
     }
 
     public void getAllUserGroups() {
-        Call<List<UserGroup>> call = contactsRepository.getAllUserGroups();
-
-        call.enqueue(new Callback<List<UserGroup>>() {
+        contactsRepository.getAllUserGroups().enqueue(new Callback<List<UserGroup>>() {
             @Override
             public void onResponse(Call<List<UserGroup>> call, Response<List<UserGroup>> response) {
                 if (response.isSuccessful()) {

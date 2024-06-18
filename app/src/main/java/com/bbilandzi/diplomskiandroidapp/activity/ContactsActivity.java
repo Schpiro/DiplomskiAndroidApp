@@ -41,6 +41,12 @@ public class ContactsActivity extends AppCompatActivity {
 
         Button logoutButton = findViewById(R.id.logout);
         logoutButton.setOnClickListener(v -> logout());
+
+        Button goToEventsButton = findViewById(R.id.btn_go_to_events);
+        goToEventsButton.setOnClickListener(v -> {
+            Intent intent = new Intent(this, EventListActivity.class);
+            startActivity(intent);
+        });
     }
 
 

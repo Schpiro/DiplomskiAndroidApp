@@ -6,6 +6,7 @@ import android.util.Log;
 import com.bbilandzi.diplomskiandroidapp.R;
 import com.bbilandzi.diplomskiandroidapp.repository.AuthRepository;
 import com.bbilandzi.diplomskiandroidapp.repository.ContactsRepository;
+import com.bbilandzi.diplomskiandroidapp.repository.EventRepository;
 import com.bbilandzi.diplomskiandroidapp.repository.MessageRepository;
 
 import java.io.InputStream;
@@ -38,7 +39,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 @InstallIn(SingletonComponent.class)
 public class Network {
-    private static final String BASE_URL = "http://192.168.1.68:8081/";
+    private static final String BASE_URL = "http://192.168.1.64:8081/";
 
     private static Retrofit retrofit = null;
 
@@ -82,6 +83,12 @@ public class Network {
     @Singleton
     public MessageRepository getMessagesRepository(Retrofit client) {
         return new MessageRepository(client);
+    }
+
+    @Provides
+    @Singleton
+    public EventRepository getEventRepository(Retrofit client) {
+        return new EventRepository(client);
     }
 
     private static OkHttpClient createOkHttpClient(Context context) {

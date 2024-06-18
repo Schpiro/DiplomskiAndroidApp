@@ -15,7 +15,6 @@ public class MessageRepository {
     MessageService messageService;
 
     @Inject
-
     public MessageRepository(Retrofit client) {
         this.messageService = client.create(MessageService.class);
     }
