@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,11 +19,6 @@ import com.bbilandzi.diplomskiandroidapp.model.CommentDTO;
 import com.bbilandzi.diplomskiandroidapp.model.EventDTO;
 import com.bbilandzi.diplomskiandroidapp.utils.AuthUtils;
 import com.bbilandzi.diplomskiandroidapp.viewmodel.EventViewModel;
-
-import org.apache.commons.text.StringEscapeUtils;
-
-import java.util.Arrays;
-import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
 

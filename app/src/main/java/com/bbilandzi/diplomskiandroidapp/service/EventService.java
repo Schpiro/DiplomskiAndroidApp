@@ -18,7 +18,7 @@ public interface EventService {
     Call<List<EventDTO>> getAllEvents();
 
     @POST("event")
-    Call<EventDTO> createEvent(@Body EventSend eventSend);
+    Call<EventDTO> createEvent(@Body EventDTO eventDTO);
 
     @GET("event/comments/{id}")
     Call<List<CommentDTO>> getCommentsForEvent(@Path("id") Long eventId);

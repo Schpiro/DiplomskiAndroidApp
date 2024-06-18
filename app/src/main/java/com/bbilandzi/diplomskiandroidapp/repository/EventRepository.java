@@ -28,8 +28,8 @@ public class EventRepository {
         return eventService.getAllEvents();
     }
 
-    public Call<EventDTO> createEvent(EventSend eventSend) {
-        return eventService.createEvent(eventSend);
+    public Call<EventDTO> createEvent(EventDTO eventDTO) {
+        return eventService.createEvent(eventDTO);
     }
 
     public Call<List<CommentDTO>> getCommentsForEvent(Long eventId) {

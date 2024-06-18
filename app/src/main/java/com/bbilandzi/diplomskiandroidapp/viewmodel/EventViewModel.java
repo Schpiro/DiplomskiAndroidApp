@@ -1,6 +1,7 @@
 package com.bbilandzi.diplomskiandroidapp.viewmodel;
 
 import static com.bbilandzi.diplomskiandroidapp.utils.MessageTypes.NEW_COMMENT;
+import static com.bbilandzi.diplomskiandroidapp.utils.MessageTypes.NEW_EVENT;
 
 import android.util.Log;
 
@@ -10,13 +11,15 @@ import androidx.lifecycle.ViewModel;
 
 import com.bbilandzi.diplomskiandroidapp.model.CommentDTO;
 import com.bbilandzi.diplomskiandroidapp.model.EventDTO;
-import com.bbilandzi.diplomskiandroidapp.model.EventSend;
 import com.bbilandzi.diplomskiandroidapp.model.WebsocketMessageDTO;
 import com.bbilandzi.diplomskiandroidapp.repository.EventRepository;
 import com.bbilandzi.diplomskiandroidapp.utils.WebSocketManager;
 import com.google.gson.Gson;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,12 +37,14 @@ public class EventViewModel extends ViewModel {
     private final MutableLiveData<List<EventDTO>> eventsLiveData = new MutableLiveData<>();
     private final MutableLiveData<List<CommentDTO>> commentsLiveData = new MutableLiveData<>();
     private final Gson gson = new Gson();
+    private List<EventDTO> originalEvents = new ArrayList<>();
 
     @Inject
     public EventViewModel(EventRepository eventRepository) {
         this.eventRepository = eventRepository;
         this.webSocketManager = WebSocketManager.getInstance();
         webSocketManager.getMessageLiveData(NEW_COMMENT).observeForever(this::onNewCommentReceived);
+        webSocketManager.getMessageLiveData(NEW_EVENT).observeForever(this::onNewEventReceived);
     }
 
     public LiveData<List<EventDTO>> getEventsLiveData() {
@@ -55,7 +60,10 @@ public class EventViewModel extends ViewModel {
             @Override
             public void onResponse(Call<List<EventDTO>> call, Response<List<EventDTO>> response) {
                 if (response.isSuccessful()) {
-                    eventsLiveData.setValue(response.body());
+                    List<EventDTO> events = response.body();
+                    eventsLiveData.setValue(events);
+                    originalEvents.clear();
+                    originalEvents.addAll(events);
                 } else {
                     Log.e("EventViewModel", "getAllEvents: Failed with code " + response.code());
                 }
@@ -66,6 +74,26 @@ public class EventViewModel extends ViewModel {
                 Log.e("EventViewModel", "getAllEvents: Failed", throwable);
             }
         });
+    }
+
+    public void filterEvents(Long date, boolean finished) {
+        List<EventDTO> currentEvents = new ArrayList<>(originalEvents); // Copy original data
+
+        List<EventDTO> filteredEvents = new ArrayList<>();
+        long currentEpochMillis = System.currentTimeMillis();
+
+        for (EventDTO event : currentEvents) {
+            LocalDateTime localDateTime = LocalDateTime.parse(event.getDate(), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            long eventEpochMillis = localDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+
+            if (!finished || eventEpochMillis >= currentEpochMillis) { // If not finished or event is in the future
+                if (date == null || eventEpochMillis >= date) { // If date is null or event is on or after the specified date
+                    filteredEvents.add(event);
+                }
+            }
+        }
+
+        eventsLiveData.setValue(filteredEvents);
     }
 
     public void getCommentsForEvent(Long eventId) {
@@ -89,14 +117,17 @@ public class EventViewModel extends ViewModel {
         });
     }
 
-    public void createEvent(EventSend eventSend) {
-        eventRepository.createEvent(eventSend).enqueue(new Callback<EventDTO>() {
+    public void createEvent(EventDTO eventDTO) {
+        eventRepository.createEvent(eventDTO).enqueue(new Callback<EventDTO>() {
             @Override
             public void onResponse(Call<EventDTO> call, Response<EventDTO> response) {
                 if (response.isSuccessful()) {
                     EventDTO eventDTO = response.body();
                     Log.d("EventViewModel", "createEvent: " + eventDTO);
-                    // Handle the created event object as needed
+                    WebsocketMessageDTO message = new WebsocketMessageDTO();
+                    message.setType(NEW_EVENT);
+                    message.setPayload(gson.toJson(eventDTO));
+                    webSocketManager.sendMessage(message);
                 } else {
                     Log.e("EventViewModel", "createEvent: Failed with code " + response.code());
                 }
@@ -141,6 +172,16 @@ public class EventViewModel extends ViewModel {
         }
         currentList.add(newComment);
         commentsLiveData.postValue(currentList);
+    }
+
+    private void onNewEventReceived(WebsocketMessageDTO message) {
+        EventDTO newEvent = gson.fromJson((String) message.getPayload(), EventDTO.class);
+        List<EventDTO> currentList = eventsLiveData.getValue();
+        if (currentList == null) {
+            currentList = new ArrayList<>();
+        }
+        currentList.add(newEvent);
+        eventsLiveData.postValue(currentList);
     }
 
     @Override

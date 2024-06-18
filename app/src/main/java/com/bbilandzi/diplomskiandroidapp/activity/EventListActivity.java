@@ -1,5 +1,7 @@
 package com.bbilandzi.diplomskiandroidapp.activity;
 
+import static com.bbilandzi.diplomskiandroidapp.utils.DateTimeUtil.getDateInMillis;
+
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,7 +28,6 @@ public class EventListActivity extends AppCompatActivity {
     private EventAdapter eventAdapter;
     private EventViewModel eventViewModel;
     private String selectedDate;
-    private Button filterButton;
     private Button createButton;
     private TextView selectedDateText;
 
@@ -70,15 +71,15 @@ public class EventListActivity extends AppCompatActivity {
                 (view, year1, month1, dayOfMonth) -> {
                     selectedDate = year1 + "-" + (month1 + 1) + "-" + dayOfMonth;
                     selectedDateText.setText(selectedDate);
-                    filterEventsByDate(selectedDate);
+                    filterEventsByDate(getDateInMillis(year1, month1, dayOfMonth));
                 },
                 year, month, day
         );
         datePickerDialog.show();
     }
 
-    private void filterEventsByDate(String date) {
-        // Implement filtering logic here
+    private void filterEventsByDate(Long date) {
+        eventViewModel.filterEvents(date, false);
     }
 
     private void openCreateEventDialog() {
