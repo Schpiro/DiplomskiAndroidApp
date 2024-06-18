@@ -5,10 +5,13 @@ import static com.bbilandzi.diplomskiandroidapp.utils.DateTimeUtil.getDateInMill
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,6 +33,7 @@ public class EventListActivity extends AppCompatActivity {
     private String selectedDate;
     private Button createButton;
     private TextView selectedDateText;
+    private boolean showOnlyUpcomingEvents;
 
 
     @Override
@@ -52,6 +56,17 @@ public class EventListActivity extends AppCompatActivity {
         createButton.setOnClickListener(v -> openCreateEventDialog());
         // Load events from ViewModel
         eventViewModel.getAllEvents();
+        SwitchCompat upcomingSwitch = findViewById(R.id.upcomingSwitch);
+        upcomingSwitch.setChecked(showOnlyUpcomingEvents);
+
+        upcomingSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            showOnlyUpcomingEvents = isChecked;
+            if(isChecked) showOnlyUpcomingEvents();
+            else {
+                selectedDateText.setText("Filter by date");
+                eventViewModel.removeAllFilters();
+            }
+        });
     }
 
     private void onEventClick(EventDTO event) {
@@ -79,7 +94,12 @@ public class EventListActivity extends AppCompatActivity {
     }
 
     private void filterEventsByDate(Long date) {
-        eventViewModel.filterEvents(date, false);
+        showOnlyUpcomingEvents = false;
+        eventViewModel.filterEvents(date);
+    }
+
+    private void showOnlyUpcomingEvents() {
+        eventViewModel.filterEvents(System.currentTimeMillis());
     }
 
     private void openCreateEventDialog() {

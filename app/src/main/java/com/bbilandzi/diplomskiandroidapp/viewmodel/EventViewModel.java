@@ -76,24 +76,25 @@ public class EventViewModel extends ViewModel {
         });
     }
 
-    public void filterEvents(Long date, boolean finished) {
-        List<EventDTO> currentEvents = new ArrayList<>(originalEvents); // Copy original data
+    public void filterEvents(Long date) {
+        List<EventDTO> currentEvents = new ArrayList<>(originalEvents);
 
         List<EventDTO> filteredEvents = new ArrayList<>();
-        long currentEpochMillis = System.currentTimeMillis();
 
         for (EventDTO event : currentEvents) {
             LocalDateTime localDateTime = LocalDateTime.parse(event.getDate(), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
             long eventEpochMillis = localDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
 
-            if (!finished || eventEpochMillis >= currentEpochMillis) { // If not finished or event is in the future
-                if (date == null || eventEpochMillis >= date) { // If date is null or event is on or after the specified date
-                    filteredEvents.add(event);
-                }
+            if (date == null || eventEpochMillis >= date) {
+                filteredEvents.add(event);
             }
         }
 
         eventsLiveData.setValue(filteredEvents);
+    }
+
+    public void removeAllFilters() {
+        eventsLiveData.setValue(originalEvents);
     }
 
     public void getCommentsForEvent(Long eventId) {

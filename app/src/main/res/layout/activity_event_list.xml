@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Container for date display and create button -->
+    <!-- Container for date display, switch, and create button -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,8 +19,17 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="None selected"
+            android:text="Filter by date"
             android:textSize="16sp" />
+
+        <!-- SwitchCompat for upcoming events -->
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/upcomingSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Upcoming events"
+            android:textSize="14sp"
+            android:layout_marginStart="8dp"/>
 
         <!-- Create button -->
         <Button
@@ -28,7 +37,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Create"
-            android:layout_marginStart="16dp"/>
+            android:layout_marginStart="16dp"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="8dp"/> <!-- Adjust the vertical padding for button height -->
     </LinearLayout>
 
     <!-- RecyclerView for events list -->
