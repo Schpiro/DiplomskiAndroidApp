@@ -1,5 +1,6 @@
 package com.bbilandzi.diplomskiandroidapp.viewmodel;
 
+import static com.bbilandzi.diplomskiandroidapp.utils.MessageTypes.GROUP_MESSAGE;
 import static com.bbilandzi.diplomskiandroidapp.utils.MessageTypes.NEW_MESSAGE;
 import static com.bbilandzi.diplomskiandroidapp.utils.MessageTypes.PRIVATE_MESSAGE;
 
@@ -35,13 +36,19 @@ public class MessageViewModel extends ViewModel {
     private final MutableLiveData<List<MessageDTO>> fetchedMessages = new MutableLiveData<>();
     private final Gson gson = new Gson();
 
+    private Long currentRecipientId;
+    private boolean currentIsGroupChat;
     @Inject
     public MessageViewModel(MessageRepository messageRepository) {
         this.webSocketManager = WebSocketManager.getInstance();
-        webSocketManager.getMessageLiveData(NEW_MESSAGE).observeForever(this::onNewMessageReceived);
         this.messageRepository = messageRepository;
+        webSocketManager.getMessageLiveData(NEW_MESSAGE).observeForever(this::onNewMessageReceived);
     }
 
+    public void setCurrentChatDetails(Long recipientId, boolean isGroupChat) {
+        this.currentRecipientId = recipientId;
+        this.currentIsGroupChat = isGroupChat;
+    }
     public LiveData<List<MessageDTO>> getFetchedMessages() {
         return fetchedMessages;
     }
@@ -86,7 +93,7 @@ public class MessageViewModel extends ViewModel {
         });
     }
 
-    public void sendMessage(MessageSend messageSend) {
+    public void sendMessage(MessageSend messageSend, boolean isGroupChat) {
         Call<MessageDTO> call = messageRepository.sendMessage(messageSend);
 
         call.enqueue(new Callback<MessageDTO>() {
@@ -95,7 +102,7 @@ public class MessageViewModel extends ViewModel {
                 if (response.isSuccessful()) {
                     MessageDTO messageDTO = response.body();
                     WebsocketMessageDTO message = new WebsocketMessageDTO();
-                    message.setType(PRIVATE_MESSAGE);
+                    message.setType(isGroupChat ? GROUP_MESSAGE : PRIVATE_MESSAGE);
                     message.setPayload(gson.toJson(messageDTO));
                     webSocketManager.sendMessage(message);
                     Log.d("Message", message.toString());
@@ -111,11 +118,15 @@ public class MessageViewModel extends ViewModel {
 
     private void onNewMessageReceived(WebsocketMessageDTO websocketMessageDTO) {
         MessageDTO newMessage = gson.fromJson(gson.toJson(websocketMessageDTO.getPayload()), MessageDTO.class);
-        List<MessageDTO> currentList = fetchedMessages.getValue();
-        if (currentList == null) {
-            currentList = new ArrayList<>();
+        if ((!currentIsGroupChat && newMessage.getRecipientId() != null && newMessage.getRecipientId().equals(currentRecipientId)) ||
+            (currentIsGroupChat && newMessage.getRecipientGroupId() != null && newMessage.getRecipientGroupId().equals(currentRecipientId)))
+        {
+            List<MessageDTO> currentList = fetchedMessages.getValue();
+            if (currentList == null) {
+                currentList = new ArrayList<>();
+            }
+            currentList.add(newMessage);
+            fetchedMessages.postValue(currentList);
         }
-        currentList.add(newMessage);
-        fetchedMessages.postValue(currentList);
     }
 }

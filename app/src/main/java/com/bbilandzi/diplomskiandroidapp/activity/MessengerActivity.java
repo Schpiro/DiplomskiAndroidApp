@@ -32,6 +32,7 @@ public class MessengerActivity extends AppCompatActivity {
     private ScrollView scrollView;
     private Long recipientId;
     private TextView recipientName;
+    private boolean isGroupChat = false;
 
 
     @Override
@@ -58,9 +59,11 @@ public class MessengerActivity extends AppCompatActivity {
             messageViewModel.getConversationWithUser(recipientId);
         } else {
             recipientName.setText(getIntent().getStringExtra("recipientGroupName"));
+            isGroupChat = true;
             messageViewModel.getConversationWithGroup(recipientId);
         }
 
+        messageViewModel.setCurrentChatDetails(recipientId, isGroupChat);
         messageViewModel.getFetchedMessages().observe(this, this::displayMessages);
 
         sendButton.setOnClickListener(this::sendMessage);
@@ -88,6 +91,7 @@ public class MessengerActivity extends AppCompatActivity {
             messageText.setText(message.getMessageBody());
             messagesContainer.addView(messageView);
         }
+        scrollView.post(() -> scrollView.fullScroll(View.FOCUS_DOWN));
     }
 
     public void sendMessage(View view) {
@@ -96,10 +100,14 @@ public class MessengerActivity extends AppCompatActivity {
         if (!messageBody.isEmpty()) {
             MessageSend messageSend = MessageSend.builder()
                     .creatorId(AuthUtils.getUserId(this))
-                    .recipientId(recipientId)
                     .messageBody(messageBody)
                     .build();
-            messageViewModel.sendMessage(messageSend);
+            if (isGroupChat) {
+                messageSend.setRecipientGroupId(recipientId);
+            } else {
+                messageSend.setRecipientId(recipientId);
+            }
+            messageViewModel.sendMessage(messageSend, isGroupChat);
             messageInput.setText("");
             scrollView.post(() -> scrollView.fullScroll(View.FOCUS_DOWN));
         }
