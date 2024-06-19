@@ -2,13 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:orientation="horizontal"
+    android:background="@drawable/user_view_backgroud"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    android:padding="8dp">
 
+    <!-- Circular Avatar Image -->
+    <ImageView
+        android:id="@+id/image_view_group_avatar"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:src="@drawable/default_avatar"
+        android:scaleType="centerCrop"
+        android:background="@drawable/avatar_background"/>
+
+    <!-- User Name TextView -->
     <TextView
-        android:id="@+id/groupName"
+        android:id="@+id/text_view_group_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Group Name"
-        android:textSize="16sp" />
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        android:layout_marginStart="16dp"
+        android:text="John Doe"
+        android:gravity="center_vertical"/>
+
 </LinearLayout>

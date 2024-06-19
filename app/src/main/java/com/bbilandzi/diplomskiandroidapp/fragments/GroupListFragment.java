@@ -35,25 +35,19 @@ public class GroupListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_group_list, container, false);
 
-        recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView = view.findViewById(R.id.recycler_view_groups);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        groupAdapter = new GroupAdapter(this::onGroupClicked);
+        groupAdapter = new GroupAdapter();
         recyclerView.setAdapter(groupAdapter);
 
-        contactsViewModel = new ViewModelProvider(this).get(ContactViewModel.class);
-        contactsViewModel.getFetchedGroups().observe(getViewLifecycleOwner(), this::updateGroups);
+        contactsViewModel = new ViewModelProvider(requireActivity()).get(ContactViewModel.class);
+        contactsViewModel.getFetchedGroups().observe(getViewLifecycleOwner(), groups -> {
+            groupAdapter.setGroups(groups);
+        });
+
+        contactsViewModel.getAllUserGroups();
 
         return view;
     }
 
-    private void updateGroups(List<UserGroup> groups) {
-        groupAdapter.setGroups(groups);
-    }
-
-    private void onGroupClicked(UserGroup group) {
-        Intent intent = new Intent(getContext(), MessengerActivity.class);
-        intent.putExtra("recipientId", group.getId());
-        intent.putExtra("recipientType", "group");
-        startActivity(intent);
-    }
 }

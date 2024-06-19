@@ -18,7 +18,6 @@ import com.bbilandzi.diplomskiandroidapp.model.MessageDTO;
 import com.bbilandzi.diplomskiandroidapp.model.MessageSend;
 import com.bbilandzi.diplomskiandroidapp.utils.AuthUtils;
 import com.bbilandzi.diplomskiandroidapp.viewmodel.MessageViewModel;
-import com.google.android.material.tabs.TabLayout;
 
 import java.util.List;
 
@@ -32,8 +31,7 @@ public class MessengerActivity extends AppCompatActivity {
     private EditText messageInput;
     private ScrollView scrollView;
     private Long recipientId;
-
-    private TextView userName;
+    private TextView recipientName;
 
 
     @Override
@@ -43,19 +41,27 @@ public class MessengerActivity extends AppCompatActivity {
 
         messageViewModel = new ViewModelProvider(this).get(MessageViewModel.class);
 
-        recipientId = getIntent().getLongExtra("recipientId", 1);
 
         messagesContainer = findViewById(R.id.messagesContainer);
         messageInput = findViewById(R.id.messageInput);
         scrollView = findViewById(R.id.scrollView);
-        scrollView.fullScroll(View.FOCUS_DOWN);
         Button sendButton = findViewById(R.id.sendButton);
-        messageViewModel.getConversationWithUser(recipientId);
+        recipientName = findViewById(R.id.messenger_title_user_name);
+
+        scrollView.fullScroll(View.FOCUS_DOWN);
+
+
+        recipientId = getIntent().getLongExtra("recipientId", 1);
+
+        if (getIntent().getStringExtra("recipientType").equals("user")) {
+            recipientName.setText(getIntent().getStringExtra("recipientUsername"));
+            messageViewModel.getConversationWithUser(recipientId);
+        } else {
+            recipientName.setText(getIntent().getStringExtra("recipientGroupName"));
+            messageViewModel.getConversationWithGroup(recipientId);
+        }
 
         messageViewModel.getFetchedMessages().observe(this, this::displayMessages);
-
-        userName = findViewById(R.id.messenger_title_user_name);
-        userName.setText(getIntent().getStringExtra("recipientUsername"));
 
         sendButton.setOnClickListener(this::sendMessage);
 
