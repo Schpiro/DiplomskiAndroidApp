@@ -37,6 +37,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         CommentDTO comment = comments.get(position);
         holder.commentTextView.setText(comment.getCommentBody());
         holder.dateTextView.setText(comment.getCreationDate());
+        holder.usernameTextView.setText(comment.getCreator());
     }
 
     @Override
@@ -47,11 +48,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     public static class CommentViewHolder extends RecyclerView.ViewHolder {
         private final TextView commentTextView;
         private final TextView dateTextView;
+        private final TextView usernameTextView;
 
         public CommentViewHolder(@NonNull View itemView) {
             super(itemView);
             commentTextView = itemView.findViewById(R.id.commentTextView);
             dateTextView = itemView.findViewById(R.id.dateTextView);
+            usernameTextView = itemView.findViewById(R.id.commentUsernameTextView);
         }
     }
 }

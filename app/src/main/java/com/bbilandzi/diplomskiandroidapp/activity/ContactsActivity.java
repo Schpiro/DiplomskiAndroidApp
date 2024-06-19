@@ -1,12 +1,9 @@
 package com.bbilandzi.diplomskiandroidapp.activity;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bbilandzi.diplomskiandroidapp.R;
@@ -14,8 +11,6 @@ import com.bbilandzi.diplomskiandroidapp.adapter.ViewPagerAdapter;
 import com.bbilandzi.diplomskiandroidapp.fragments.CreateGroupDialogFragment;
 import com.bbilandzi.diplomskiandroidapp.fragments.GroupListFragment;
 import com.bbilandzi.diplomskiandroidapp.fragments.UserListFragment;
-import com.bbilandzi.diplomskiandroidapp.utils.AuthUtils;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -48,12 +43,6 @@ public class ContactsActivity extends BaseActivity implements CreateGroupDialogF
     }
 
 
-    private void logout() {
-        AuthUtils.clearToken(this);
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        finish();
-    }
 
 
     @Override

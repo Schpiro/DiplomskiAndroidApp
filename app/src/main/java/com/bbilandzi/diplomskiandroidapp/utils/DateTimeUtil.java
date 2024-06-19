@@ -1,6 +1,8 @@
 package com.bbilandzi.diplomskiandroidapp.utils;
 
+import com.bbilandzi.diplomskiandroidapp.model.CommentDTO;
 import com.bbilandzi.diplomskiandroidapp.model.EventDTO;
+
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -18,6 +20,14 @@ public class DateTimeUtil {
         return (event1, event2) -> {
             LocalDateTime date1 = LocalDateTime.parse(event1.getDate(), DateTimeFormatter.ISO_DATE_TIME);
             LocalDateTime date2 = LocalDateTime.parse(event2.getDate(), DateTimeFormatter.ISO_DATE_TIME);
+            return date2.compareTo(date1);
+        };
+    }
+
+    public static Comparator<CommentDTO> commentDateComparator() {
+        return (comment1, comment2) -> {
+            LocalDateTime date1 = LocalDateTime.parse(comment1.getCreationDate(), DateTimeFormatter.ISO_DATE_TIME);
+            LocalDateTime date2 = LocalDateTime.parse(comment2.getCreationDate(), DateTimeFormatter.ISO_DATE_TIME);
             return date2.compareTo(date1);
         };
     }

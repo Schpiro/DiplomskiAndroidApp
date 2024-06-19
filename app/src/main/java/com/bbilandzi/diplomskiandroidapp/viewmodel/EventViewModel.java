@@ -105,9 +105,9 @@ public class EventViewModel extends ViewModel {
             public void onResponse(Call<List<CommentDTO>> call, Response<List<CommentDTO>> response) {
                 if (response.isSuccessful()) {
                     List<CommentDTO> comments = response.body();
+                    comments.sort(DateTimeUtil.commentDateComparator());
                     commentsLiveData.setValue(comments);
                     Log.d("EventViewModel", "getCommentsForEvent: " + comments);
-                    // Handle the comments list as needed
                 } else {
                     Log.e("EventViewModel", "getCommentsForEvent: Failed with code " + response.code());
                 }
@@ -167,13 +167,13 @@ public class EventViewModel extends ViewModel {
     }
 
     private void onNewCommentReceived(WebsocketMessageDTO message) {
-        CommentDTO newComment = gson.fromJson((String) message.getPayload(), CommentDTO.class);
-        newComment.setCreationDate(String.valueOf(Instant.now().toEpochMilli()));
+        CommentDTO newComment = gson.fromJson(gson.toJson(message.getPayload()), CommentDTO.class);
         List<CommentDTO> currentList = commentsLiveData.getValue();
         if (currentList == null) {
             currentList = new ArrayList<>();
         }
         currentList.add(newComment);
+        currentList.sort(DateTimeUtil.commentDateComparator());
         commentsLiveData.postValue(currentList);
     }
 

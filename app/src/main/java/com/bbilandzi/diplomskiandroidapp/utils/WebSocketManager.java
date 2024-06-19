@@ -27,8 +27,6 @@ public class WebSocketManager {
     private static WebSocketManager instance;
     private final Map<MessageTypes, MutableLiveData<WebsocketMessageDTO>> messageTypeLiveDataMap = new HashMap<>();
 
-
-
     private OkHttpClient client;
     private WebSocket webSocket;
     private Gson gson;
@@ -99,31 +97,5 @@ public class WebSocketManager {
 
     public LiveData<WebsocketMessageDTO> getMessageLiveData(MessageTypes messageType) {
         return messageTypeLiveDataMap.computeIfAbsent(messageType, k -> new MutableLiveData<>());
-    }
-
-    private void handleWebSocketMessage(WebsocketMessageDTO message) {
-        switch (message.getType()) {
-            case CLIENT_ID:
-                // Handle CLIENT_ID
-                break;
-            case PRIVATE_MESSAGE:
-                // Handle PRIVATE_MESSAGE
-                break;
-            case GROUP_MESSAGE:
-                // Handle GROUP_MESSAGE
-                break;
-            case NEW_GROUP:
-                // Handle NEW_GROUP
-                break;
-            case NEW_EVENT:
-                // Handle NEW_EVENT
-                break;
-            case NEW_COMMENT:
-                // Handle NEW_COMMENT
-                break;
-            default:
-                Log.w(TAG, "Unknown message type: " + message.getType());
-                break;
-        }
     }
 }

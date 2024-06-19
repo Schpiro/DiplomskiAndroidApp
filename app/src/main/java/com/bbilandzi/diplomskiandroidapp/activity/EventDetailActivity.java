@@ -20,6 +20,8 @@ import com.bbilandzi.diplomskiandroidapp.model.EventDTO;
 import com.bbilandzi.diplomskiandroidapp.utils.AuthUtils;
 import com.bbilandzi.diplomskiandroidapp.viewmodel.EventViewModel;
 
+import java.time.Instant;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
@@ -86,6 +88,7 @@ public class EventDetailActivity extends AppCompatActivity {
                         .eventId(event.getId())
                         .creatorId(AuthUtils.getUserId(this))
                         .creator(AuthUtils.getUsername(this))
+                        .creationDate(Instant.now().toString().replaceAll("Z$",""))
                         .build();
                 eventViewModel.createCommentForEvent(event.getId(), newComment);
                 newCommentEditText.setText("");
