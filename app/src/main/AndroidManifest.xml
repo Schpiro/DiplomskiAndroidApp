@@ -26,9 +26,11 @@
         </activity>
 
         <activity android:name=".activity.AuthActivity" />
+        <activity android:name=".activity.BaseActivity" />
         <activity android:name=".activity.ContactsActivity" />
         <activity android:name=".activity.MessengerActivity" />
         <activity android:name=".activity.EventListActivity" />
         <activity android:name=".activity.EventDetailActivity" />
+        <activity android:name=".activity.ProfileActivity" />
     </application>
 </manifest>

@@ -10,6 +10,7 @@ import javax.inject.Inject;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;
+import retrofit2.http.Body;
 
 public class ContactsRepository {
     ContactService contactService;
@@ -30,4 +31,9 @@ public class ContactsRepository {
     public Call<List<UserDTO>> getAllUsersInGroup(Long id) {
         return contactService.getUsersInGroup(id);
     }
+
+    public Call<UserGroup> createMessageGroup(@Body UserGroup userGroup) {
+        return contactService.createMessageGroup(userGroup);
+    }
+
 }

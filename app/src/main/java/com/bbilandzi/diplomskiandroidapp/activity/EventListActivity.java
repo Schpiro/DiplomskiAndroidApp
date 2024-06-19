@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -26,20 +27,19 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 @AndroidEntryPoint
-public class EventListActivity extends AppCompatActivity {
+public class EventListActivity extends BaseActivity {
 
     private EventAdapter eventAdapter;
     private EventViewModel eventViewModel;
     private String selectedDate;
     private Button createButton;
-    private TextView selectedDateText;
-    private boolean showOnlyUpcomingEvents;
+    private ImageView filter;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_list);
+        setActivityContent(R.layout.activity_event_list);
 
         RecyclerView recyclerView = findViewById(R.id.recyclerViewEvents);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -50,23 +50,12 @@ public class EventListActivity extends AppCompatActivity {
         // Observe the events LiveData
         eventViewModel.getEventsLiveData().observe(this, eventDTOS -> eventAdapter.updateEvents(eventDTOS));
 
-        selectedDateText = findViewById(R.id.selected_date_text);
+        filter = findViewById(R.id.selected_date_filter);
         createButton = findViewById(R.id.create_button);
-        selectedDateText.setOnClickListener(v -> openDatePicker());
+        filter.setOnClickListener(v -> openDatePicker());
         createButton.setOnClickListener(v -> openCreateEventDialog());
         // Load events from ViewModel
         eventViewModel.getAllEvents();
-        SwitchCompat upcomingSwitch = findViewById(R.id.upcomingSwitch);
-        upcomingSwitch.setChecked(showOnlyUpcomingEvents);
-
-        upcomingSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            showOnlyUpcomingEvents = isChecked;
-            if(isChecked) showOnlyUpcomingEvents();
-            else {
-                selectedDateText.setText("Filter by date");
-                eventViewModel.removeAllFilters();
-            }
-        });
     }
 
     private void onEventClick(EventDTO event) {
@@ -85,7 +74,6 @@ public class EventListActivity extends AppCompatActivity {
                 this,
                 (view, year1, month1, dayOfMonth) -> {
                     selectedDate = year1 + "-" + (month1 + 1) + "-" + dayOfMonth;
-                    selectedDateText.setText(selectedDate);
                     filterEventsByDate(getDateInMillis(year1, month1, dayOfMonth));
                 },
                 year, month, day
@@ -94,12 +82,7 @@ public class EventListActivity extends AppCompatActivity {
     }
 
     private void filterEventsByDate(Long date) {
-        showOnlyUpcomingEvents = false;
         eventViewModel.filterEvents(date);
-    }
-
-    private void showOnlyUpcomingEvents() {
-        eventViewModel.filterEvents(System.currentTimeMillis());
     }
 
     private void openCreateEventDialog() {

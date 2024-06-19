@@ -6,7 +6,9 @@ import com.bbilandzi.diplomskiandroidapp.model.UserGroup;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface ContactService {
@@ -18,4 +20,7 @@ public interface ContactService {
 
     @GET("users/groups/{id}")
     Call<List<UserDTO>> getUsersInGroup(@Path("id") Long id);
+
+    @POST("users/groups")
+    Call<UserGroup> createMessageGroup(@Body UserGroup userGroup);
 }

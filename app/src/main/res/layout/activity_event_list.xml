@@ -13,33 +13,32 @@
         android:gravity="center_vertical"
         android:layout_marginBottom="16dp">
 
-        <!-- TextView for displaying selected date -->
-        <TextView
-            android:id="@+id/selected_date_text"
+        <!-- ImageView for displaying selected date -->
+        <ImageView
+            android:id="@+id/selected_date_filter"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_filter_funnel"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:scaleType="fitCenter"/>
+
+        <!-- Spacer View to take up remaining space -->
+        <View
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Filter by date"
-            android:textSize="16sp" />
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
-        <!-- SwitchCompat for upcoming events -->
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/upcomingSwitch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Upcoming events"
-            android:textSize="14sp"
-            android:layout_marginStart="8dp"/>
-
-        <!-- Create button -->
+        <!-- Create Button -->
         <Button
             android:id="@+id/create_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Create"
-            android:layout_marginStart="16dp"
-            android:paddingHorizontal="12dp"
-            android:paddingVertical="8dp"/> <!-- Adjust the vertical padding for button height -->
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/round_button_background"
+            android:padding="0dp"
+            android:text="+"
+            android:layout_marginEnd="16dp"/>
+
     </LinearLayout>
 
     <!-- RecyclerView for events list -->

@@ -1,6 +1,6 @@
 <!-- round_button_background.xml -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="oval">
-    <solid android:color="@color/colorAccent" />
-    <corners android:radius="27.5dp" /><!-- Change colorAccent to your desired button color -->
+    <solid android:color="#F3E5F5" />
+    <corners android:radius="27.5dp" />
 </shape>

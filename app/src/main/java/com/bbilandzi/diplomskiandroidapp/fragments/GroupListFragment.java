@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,12 +20,13 @@ import com.bbilandzi.diplomskiandroidapp.adapter.GroupAdapter;
 import com.bbilandzi.diplomskiandroidapp.model.UserGroup;
 import com.bbilandzi.diplomskiandroidapp.viewmodel.ContactViewModel;
 
+import java.util.Arrays;
 import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class GroupListFragment extends Fragment {
+public class GroupListFragment extends Fragment{
 
     private ContactViewModel contactsViewModel;
     private RecyclerView recyclerView;
@@ -46,6 +48,11 @@ public class GroupListFragment extends Fragment {
         });
 
         contactsViewModel.getAllUserGroups();
+
+        view.findViewById(R.id.openDialogButton).setOnClickListener(v -> {
+            CreateGroupDialogFragment dialogFragment = new CreateGroupDialogFragment(contactsViewModel.getFetchedUsers(), (CreateGroupDialogFragment.CreateGroupDialogListener) getActivity());
+            dialogFragment.show(getParentFragmentManager(), "create_group");
+        });
 
         return view;
     }

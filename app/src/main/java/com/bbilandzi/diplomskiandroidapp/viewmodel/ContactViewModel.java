@@ -73,4 +73,21 @@ public class ContactViewModel extends ViewModel {
             }
         });
     }
+
+    public void createMessageGroup(UserGroup userGroup) {
+        contactsRepository.createMessageGroup(userGroup).enqueue(new Callback<UserGroup>() {
+            @Override
+            public void onResponse(Call<UserGroup> call, Response<UserGroup> response) {
+                if (response.isSuccessful()) {
+                    UserGroup group = response.body();
+                    Log.d("ContactViewModel", group.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserGroup> call, Throwable throwable) {
+                Log.e("ContactViewModel Error", "Failed: " + throwable.getMessage());
+            }
+        });
+    }
 }
