@@ -62,13 +62,13 @@ public class MessageViewModel extends ViewModel {
                 if (response.isSuccessful()) {
                     List<MessageDTO> message = response.body();
                     fetchedMessages.postValue(message);
-                    Log.d("Messages", message.toString());
+                    Log.d("MessageViewModel", message.toString());
                 }
             }
 
             @Override
             public void onFailure(Call<List<MessageDTO>> call, Throwable throwable) {
-                Log.e("GetConversationWithUser Error", "Failed: " + throwable.getMessage());
+                Log.e("MessageViewModel Error", "Failed: " + throwable.getMessage());
             }
         });
     }
@@ -82,13 +82,13 @@ public class MessageViewModel extends ViewModel {
                 if (response.isSuccessful()) {
                     List<MessageDTO> message = response.body();
                     fetchedMessages.postValue(message);
-                    Log.d("Messages", message.toString());
+                    Log.d("MessageViewModel", message.toString());
                 }
             }
 
             @Override
             public void onFailure(Call<List<MessageDTO>> call, Throwable throwable) {
-                Log.e("getConversationWithGroup Error", "Failed: " + throwable.getMessage());
+                Log.e("MessageViewModel Error", "Failed: " + throwable.getMessage());
             }
         });
     }
@@ -105,13 +105,13 @@ public class MessageViewModel extends ViewModel {
                     message.setType(isGroupChat ? GROUP_MESSAGE : PRIVATE_MESSAGE);
                     message.setPayload(gson.toJson(messageDTO));
                     webSocketManager.sendMessage(message);
-                    Log.d("Message", message.toString());
+                    Log.d("MessageViewModel", message.toString());
                 }
             }
 
             @Override
             public void onFailure(Call<MessageDTO> call, Throwable throwable) {
-                Log.e("sendMessage Error", "Failed: " + throwable.getMessage());
+                Log.e("MessageViewModel Error", "Failed: " + throwable.getMessage());
             }
         });
     }

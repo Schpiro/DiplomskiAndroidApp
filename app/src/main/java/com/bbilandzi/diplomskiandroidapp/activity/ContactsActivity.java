@@ -19,7 +19,7 @@ import java.util.List;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class ContactsActivity extends BaseActivity implements CreateGroupDialogFragment.CreateGroupDialogListener{
+public class ContactsActivity extends BaseActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +42,4 @@ public class ContactsActivity extends BaseActivity implements CreateGroupDialogF
         viewPager.setAdapter(adapter);
     }
 
-
-
-
-    @Override
-    public void onSubmit(String groupName, List<Long> selectedUser) {
-        Log.d("Users", selectedUser.toString());
-    }
 }

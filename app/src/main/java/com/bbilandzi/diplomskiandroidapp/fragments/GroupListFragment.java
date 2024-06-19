@@ -50,7 +50,7 @@ public class GroupListFragment extends Fragment{
         contactsViewModel.getAllUserGroups();
 
         view.findViewById(R.id.openDialogButton).setOnClickListener(v -> {
-            CreateGroupDialogFragment dialogFragment = new CreateGroupDialogFragment(contactsViewModel.getFetchedUsers(), (CreateGroupDialogFragment.CreateGroupDialogListener) getActivity());
+            CreateGroupDialogFragment dialogFragment = new CreateGroupDialogFragment(contactsViewModel.getFetchedUsers());
             dialogFragment.show(getParentFragmentManager(), "create_group");
         });
 

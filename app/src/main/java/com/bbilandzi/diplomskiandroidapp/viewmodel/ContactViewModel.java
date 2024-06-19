@@ -1,5 +1,8 @@
 package com.bbilandzi.diplomskiandroidapp.viewmodel;
 
+import static com.bbilandzi.diplomskiandroidapp.utils.MessageTypes.NEW_GROUP;
+import static com.bbilandzi.diplomskiandroidapp.utils.MessageTypes.NEW_MESSAGE;
+
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -8,8 +11,12 @@ import androidx.lifecycle.ViewModel;
 
 import com.bbilandzi.diplomskiandroidapp.model.UserDTO;
 import com.bbilandzi.diplomskiandroidapp.model.UserGroup;
+import com.bbilandzi.diplomskiandroidapp.model.WebsocketMessageDTO;
 import com.bbilandzi.diplomskiandroidapp.repository.ContactsRepository;
+import com.bbilandzi.diplomskiandroidapp.utils.WebSocketManager;
+import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -21,13 +28,18 @@ import retrofit2.Response;
 
 @HiltViewModel
 public class ContactViewModel extends ViewModel {
+    private final WebSocketManager webSocketManager;
     private ContactsRepository contactsRepository;
     private MutableLiveData<List<UserDTO>> fetchedUsers = new MutableLiveData<>();
     private MutableLiveData<List<UserGroup>> fetchedGroups = new MutableLiveData<>();
+    private final Gson gson = new Gson();
+
 
     @Inject
     public ContactViewModel(ContactsRepository contactsRepository) {
+        this.webSocketManager = WebSocketManager.getInstance();
         this.contactsRepository = contactsRepository;
+        webSocketManager.getMessageLiveData(NEW_GROUP).observeForever(this::onNewUserGroupReceived);
     }
 
     public LiveData<List<UserDTO>> getFetchedUsers() {
@@ -80,6 +92,10 @@ public class ContactViewModel extends ViewModel {
             public void onResponse(Call<UserGroup> call, Response<UserGroup> response) {
                 if (response.isSuccessful()) {
                     UserGroup group = response.body();
+                    WebsocketMessageDTO message = new WebsocketMessageDTO();
+                    message.setType(NEW_GROUP);
+                    message.setPayload(gson.toJson(group));
+                    webSocketManager.sendMessage(message);
                     Log.d("ContactViewModel", group.toString());
                 }
             }
@@ -90,4 +106,15 @@ public class ContactViewModel extends ViewModel {
             }
         });
     }
+
+    private void onNewUserGroupReceived(WebsocketMessageDTO websocketMessageDTO) {
+        UserGroup newUserGroup = gson.fromJson(gson.toJson(websocketMessageDTO.getPayload()), UserGroup.class);
+        List<UserGroup> currentList = fetchedGroups.getValue();
+        if (currentList == null) {
+            currentList = new ArrayList<>();
+        }
+        currentList.add(newUserGroup);
+        fetchedGroups.postValue(currentList);
+    }
+
 }
