@@ -12,15 +12,13 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.bbilandzi.diplomskiandroidapp.R;
-import com.bbilandzi.diplomskiandroidapp.adapter.ViewPagerAdapter;
 import com.bbilandzi.diplomskiandroidapp.model.MessageDTO;
 import com.bbilandzi.diplomskiandroidapp.model.MessageSend;
+import com.bbilandzi.diplomskiandroidapp.utils.AuthUtils;
 import com.bbilandzi.diplomskiandroidapp.viewmodel.MessageViewModel;
 import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.List;
 
@@ -35,6 +33,9 @@ public class MessengerActivity extends AppCompatActivity {
     private ScrollView scrollView;
     private Long recipientId;
 
+    private TextView userName;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,22 +43,19 @@ public class MessengerActivity extends AppCompatActivity {
 
         messageViewModel = new ViewModelProvider(this).get(MessageViewModel.class);
 
-        recipientId = getIntent().getLongExtra("userId", 0);
-
-
-        // TODO: needs fixing
-        //TabLayout tabLayout = findViewById(R.id.tabLayout);
-        //ViewPager2 viewPager = findViewById(R.id.viewPager);
-        //ViewPagerAdapter adapter = new ViewPagerAdapter(this);
-        //viewPager.setAdapter(adapter);
+        recipientId = getIntent().getLongExtra("recipientId", 1);
 
         messagesContainer = findViewById(R.id.messagesContainer);
         messageInput = findViewById(R.id.messageInput);
         scrollView = findViewById(R.id.scrollView);
+        scrollView.fullScroll(View.FOCUS_DOWN);
         Button sendButton = findViewById(R.id.sendButton);
         messageViewModel.getConversationWithUser(recipientId);
 
         messageViewModel.getFetchedMessages().observe(this, this::displayMessages);
+
+        userName = findViewById(R.id.messenger_title_user_name);
+        userName.setText(getIntent().getStringExtra("recipientUsername"));
 
         sendButton.setOnClickListener(this::sendMessage);
 
@@ -68,26 +66,21 @@ public class MessengerActivity extends AppCompatActivity {
             }
             return false;
         });
-
-        /*new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
-            if (position == 0) {
-                tab.setText("Users");
-            } else {
-                tab.setText("Groups");
-            }
-        }).attach();*/
     }
 
     private void displayMessages(List<MessageDTO> messages) {
         messagesContainer.removeAllViews();
 
         for (MessageDTO message : messages) {
-            TextView textView = new TextView(this);
-            textView.setText(message.getMessageBody());
-            // Add other properties like layout params, margins, etc.
-
-            // Add the TextView to the usersContainer
-            messagesContainer.addView(textView);
+            View messageView;
+            if (message.getCreatorId().equals(AuthUtils.getUserId(this))) {
+                messageView = getLayoutInflater().inflate(R.layout.item_message_user, messagesContainer, false);
+            } else {
+                messageView = getLayoutInflater().inflate(R.layout.item_message, messagesContainer, false);
+            }
+            TextView messageText = messageView.findViewById(R.id.messageTextView);
+            messageText.setText(message.getMessageBody());
+            messagesContainer.addView(messageView);
         }
     }
 
@@ -96,14 +89,11 @@ public class MessengerActivity extends AppCompatActivity {
 
         if (!messageBody.isEmpty()) {
             MessageSend messageSend = MessageSend.builder()
+                    .creatorId(AuthUtils.getUserId(this))
                     .recipientId(recipientId)
                     .messageBody(messageBody)
                     .build();
             messageViewModel.sendMessage(messageSend);
-            View messageView = getLayoutInflater().inflate(R.layout.message_item, messagesContainer, false);
-            TextView messageText = messageView.findViewById(R.id.messageTextView);
-            messageText.setText(messageBody);
-            messagesContainer.addView(messageView);
             messageInput.setText("");
             scrollView.post(() -> scrollView.fullScroll(View.FOCUS_DOWN));
         }

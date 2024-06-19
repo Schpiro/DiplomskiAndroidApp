@@ -46,11 +46,4 @@ public class UserListFragment extends Fragment {
 
         return rootView;
     }
-
-    private void onUserClicked(UserDTO user) {
-        Intent intent = new Intent(getContext(), MessengerActivity.class);
-        intent.putExtra("recipientId", user.getId());
-        intent.putExtra("recipientType", "user");
-        startActivity(intent);
-    }
 }

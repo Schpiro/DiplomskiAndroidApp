@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.Getter;
 
 public class MessageDTO {
+    @Getter
     private Long creatorId;
     private String creator;
     private Long recipientId;
