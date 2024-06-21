@@ -18,6 +18,7 @@ import com.bbilandzi.diplomskiandroidapp.adapter.CommentAdapter;
 import com.bbilandzi.diplomskiandroidapp.model.CommentDTO;
 import com.bbilandzi.diplomskiandroidapp.model.EventDTO;
 import com.bbilandzi.diplomskiandroidapp.utils.AuthUtils;
+import com.bbilandzi.diplomskiandroidapp.utils.DateTimeUtil;
 import com.bbilandzi.diplomskiandroidapp.viewmodel.EventViewModel;
 
 import java.time.Instant;
@@ -57,7 +58,7 @@ public class EventDetailActivity extends AppCompatActivity {
         submitCommentButton = findViewById(R.id.submitCommentButton);
 
         titleTextView.setText(event.getTitle());
-        dateTextView.setText(event.getDate());
+        dateTextView.setText(DateTimeUtil.getIsoIntoMinutesHourDayMonthYear(event.getDate()));
         locationTextView.setText(event.getLocation());
         detailsTextView.setText(event.getDetails());
         creatorTextView.setText("Creator: " + event.getCreator());

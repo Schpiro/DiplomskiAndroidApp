@@ -8,12 +8,33 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Comparator;
+import java.util.Locale;
 
 public class DateTimeUtil {
     public static long getDateInMillis(int year, int month, int dayOfMonth) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, dayOfMonth);
         return calendar.getTimeInMillis();
+    }
+
+    public static String getIsoIntoYearMonthDate(String date) {
+        LocalDateTime dateTime = LocalDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault());
+        return dateTime.format(formatter);
+    }
+
+    public static String getIsoIntoMinutesHourDayMonthYear(String date) {
+        LocalDateTime dateTime = LocalDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy", Locale.getDefault());
+        return dateTime.format(formatter);
+    }
+
+    public static String getIsoIntoHours(String date) {
+        LocalDateTime dateTime = LocalDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm", Locale.getDefault());
+        return dateTime.format(formatter);
     }
 
     public static Comparator<EventDTO> eventDateComparator() {

@@ -23,7 +23,7 @@ import okhttp3.WebSocketListener;
 
 public class WebSocketManager {
     private static final String TAG = "WebSocketManager";
-    private static final String SERVER_URL = "ws://192.168.1.64:8081/socket/test";
+    private static final String SERVER_URL = "ws://192.168.1.149:8081/socket/test";
     private static WebSocketManager instance;
     private final Map<MessageTypes, MutableLiveData<WebsocketMessageDTO>> messageTypeLiveDataMap = new HashMap<>();
 

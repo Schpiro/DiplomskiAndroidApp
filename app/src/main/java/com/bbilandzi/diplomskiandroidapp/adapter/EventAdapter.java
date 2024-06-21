@@ -14,8 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bbilandzi.diplomskiandroidapp.R;
 import com.bbilandzi.diplomskiandroidapp.model.EventDTO;
+import com.bbilandzi.diplomskiandroidapp.utils.DateTimeUtil;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
 
@@ -92,7 +96,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
         public void bind(EventDTO event) {
             eventTitleTextView.setText(event.getTitle());
-            eventDateTextView.setText(event.getDate());
+            eventDateTextView.setText(DateTimeUtil.getIsoIntoYearMonthDate(event.getDate()));
             eventLocationTextView.setText(event.getLocation());
 
             // Toggle visibility of additional details

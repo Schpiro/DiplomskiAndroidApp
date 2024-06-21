@@ -6,6 +6,15 @@
     android:orientation="vertical"
     android:padding="8dp">
 
+    <!-- User ID TextView -->
+    <TextView
+        android:id="@+id/userIdTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@android:color/darker_gray"
+        android:layout_marginTop="4dp" />
+
     <!-- Message TextView -->
     <TextView
         android:id="@+id/messageTextView"
@@ -16,5 +25,14 @@
         android:background="@drawable/background_message"
         android:padding="8dp"
         android:layout_gravity="start" />
+
+    <!-- Time TextView -->
+    <TextView
+        android:id="@+id/timeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@android:color/darker_gray"
+        android:layout_marginTop="4dp" />
 
 </LinearLayout>

@@ -17,6 +17,7 @@ import com.bbilandzi.diplomskiandroidapp.R;
 import com.bbilandzi.diplomskiandroidapp.model.MessageDTO;
 import com.bbilandzi.diplomskiandroidapp.model.MessageSend;
 import com.bbilandzi.diplomskiandroidapp.utils.AuthUtils;
+import com.bbilandzi.diplomskiandroidapp.utils.DateTimeUtil;
 import com.bbilandzi.diplomskiandroidapp.viewmodel.MessageViewModel;
 
 import java.util.List;
@@ -87,10 +88,21 @@ public class MessengerActivity extends AppCompatActivity {
             } else {
                 messageView = getLayoutInflater().inflate(R.layout.item_message, messagesContainer, false);
             }
+
             TextView messageText = messageView.findViewById(R.id.messageTextView);
             messageText.setText(message.getMessageBody());
+
+            TextView userIdText = messageView.findViewById(R.id.userIdTextView);
+            userIdText.setText(message.getCreator());
+
+            TextView timeText = messageView.findViewById(R.id.timeTextView);
+            // Assuming message.getTime() returns the time in a format you can directly display
+            timeText.setText(DateTimeUtil.getIsoIntoHours(message.getCreationDate()));
+
             messagesContainer.addView(messageView);
         }
+
+        // Scroll to the bottom of the ScrollView after adding messages
         scrollView.post(() -> scrollView.fullScroll(View.FOCUS_DOWN));
     }
 

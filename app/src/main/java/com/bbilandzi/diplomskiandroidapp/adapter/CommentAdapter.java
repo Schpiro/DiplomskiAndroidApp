@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bbilandzi.diplomskiandroidapp.R;
 import com.bbilandzi.diplomskiandroidapp.model.CommentDTO;
+import com.bbilandzi.diplomskiandroidapp.utils.DateTimeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
         CommentDTO comment = comments.get(position);
         holder.commentTextView.setText(comment.getCommentBody());
-        holder.dateTextView.setText(comment.getCreationDate());
+        holder.dateTextView.setText(DateTimeUtil.getIsoIntoMinutesHourDayMonthYear(comment.getCreationDate()));
         holder.usernameTextView.setText(comment.getCreator());
     }
 
