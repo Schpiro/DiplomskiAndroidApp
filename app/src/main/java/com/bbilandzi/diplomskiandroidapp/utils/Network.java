@@ -8,6 +8,7 @@ import com.bbilandzi.diplomskiandroidapp.repository.AuthRepository;
 import com.bbilandzi.diplomskiandroidapp.repository.ContactsRepository;
 import com.bbilandzi.diplomskiandroidapp.repository.EventRepository;
 import com.bbilandzi.diplomskiandroidapp.repository.MessageRepository;
+import com.bbilandzi.diplomskiandroidapp.BuildConfig;
 
 import java.io.InputStream;
 import java.security.KeyManagementException;
@@ -39,7 +40,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 @InstallIn(SingletonComponent.class)
 public class Network {
-    private static final String BASE_URL = "http://192.168.1.64:8081/";
+    private static final String BASE_URL = BuildConfig.BASE_URL;
 
     private static Retrofit retrofit = null;
 

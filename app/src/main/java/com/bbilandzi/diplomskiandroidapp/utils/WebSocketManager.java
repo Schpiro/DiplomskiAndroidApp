@@ -8,6 +8,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.bbilandzi.diplomskiandroidapp.BuildConfig;
 import com.bbilandzi.diplomskiandroidapp.model.WebsocketMessageDTO;
 import com.google.gson.Gson;
 
@@ -23,7 +24,7 @@ import okhttp3.WebSocketListener;
 
 public class WebSocketManager {
     private static final String TAG = "WebSocketManager";
-    private static final String SERVER_URL = "ws://192.168.1.64:8081/socket/test";
+    private static final String SERVER_URL = BuildConfig.WS_URL;
     private static WebSocketManager instance;
     private final Map<MessageTypes, MutableLiveData<WebsocketMessageDTO>> messageTypeLiveDataMap = new HashMap<>();
 

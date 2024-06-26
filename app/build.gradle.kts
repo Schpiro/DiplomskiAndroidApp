@@ -13,7 +13,8 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
+        buildConfigField("String", "BASE_URL", "\"http://192.168.1.64:8081/\"")
+        buildConfigField("String", "WS_URL", "\"ws://192.168.1.64:8081/socket/test\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -33,6 +34,10 @@ android {
     }
     dataBinding {
         enable = true
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 }
 
