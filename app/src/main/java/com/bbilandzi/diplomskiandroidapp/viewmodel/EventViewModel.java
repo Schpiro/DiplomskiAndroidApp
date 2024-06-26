@@ -17,7 +17,6 @@ import com.bbilandzi.diplomskiandroidapp.utils.DateTimeUtil;
 import com.bbilandzi.diplomskiandroidapp.utils.WebSocketManager;
 import com.google.gson.Gson;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -27,6 +26,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
+import lombok.Setter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,6 +39,8 @@ public class EventViewModel extends ViewModel {
     private final MutableLiveData<List<CommentDTO>> commentsLiveData = new MutableLiveData<>();
     private final Gson gson = new Gson();
     private List<EventDTO> originalEvents = new ArrayList<>();
+    @Setter
+    private boolean oldestFirstFilter = false;
 
     @Inject
     public EventViewModel(EventRepository eventRepository) {
@@ -105,7 +107,7 @@ public class EventViewModel extends ViewModel {
             public void onResponse(Call<List<CommentDTO>> call, Response<List<CommentDTO>> response) {
                 if (response.isSuccessful()) {
                     List<CommentDTO> comments = response.body();
-                    comments.sort(DateTimeUtil.commentDateComparator());
+                    comments.sort(oldestFirstFilter ? DateTimeUtil.commentDateComparatorReverse() : DateTimeUtil.commentDateComparator());
                     commentsLiveData.setValue(comments);
                     Log.d("EventViewModel", "getCommentsForEvent: " + comments);
                 } else {
@@ -172,8 +174,9 @@ public class EventViewModel extends ViewModel {
         if (currentList == null) {
             currentList = new ArrayList<>();
         }
+        newComment.setCreationDate(DateTimeUtil.systemTime(newComment.getCreationDate()));
         currentList.add(newComment);
-        currentList.sort(DateTimeUtil.commentDateComparator());
+        currentList.sort(oldestFirstFilter ? DateTimeUtil.commentDateComparatorReverse() : DateTimeUtil.commentDateComparator());
         commentsLiveData.postValue(currentList);
     }
 
@@ -184,8 +187,11 @@ public class EventViewModel extends ViewModel {
             currentList = new ArrayList<>();
         }
         currentList.add(newEvent);
+        currentList.sort(DateTimeUtil.eventDateComparator());
         eventsLiveData.postValue(currentList);
+        originalEvents = currentList;
     }
+
 
     @Override
     protected void onCleared() {

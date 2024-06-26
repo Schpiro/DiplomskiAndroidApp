@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,7 +43,7 @@ public class AuthActivity extends AppCompatActivity {
         usernameEditText = findViewById(R.id.username);
         passwordEditText = findViewById(R.id.password);
         Button loginButton = findViewById(R.id.submit_button);
-        Button authSwitch = findViewById(R.id.auth_switch_button);
+        TextView authSwitch = findViewById(R.id.auth_switch_text);
 
         loginButton.setOnClickListener(v -> {
             try {
@@ -65,7 +66,7 @@ public class AuthActivity extends AppCompatActivity {
         usernameEditText = findViewById(R.id.username);
         passwordEditText = findViewById(R.id.password);
         Button registerButton = findViewById(R.id.submit_button);
-        Button authSwitch = findViewById(R.id.auth_switch_button);
+        TextView authSwitch = findViewById(R.id.auth_switch_text);
 
         registerButton.setOnClickListener(v -> {
             try {

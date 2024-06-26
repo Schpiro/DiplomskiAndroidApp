@@ -7,7 +7,7 @@
     <string name="arrow_right"><![CDATA[>]]></string>
     <string name="arrow_left"><![CDATA[<]]></string>
     <string-array name="comment_filters">
-        <item>Oldest to Newest</item>
-        <item>Newest to Oldest</item>
+        <item>Newest first</item>
+        <item>Oldest first</item>
     </string-array>
 </resources>

@@ -2,5 +2,6 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="colorAccent">#FF4081</color> <!-- Replace with your accent color -->
+    <color name="lightPurple">#D1C4E9</color>
+    <color name="lightBlue">#BBDEFB</color>
 </resources>

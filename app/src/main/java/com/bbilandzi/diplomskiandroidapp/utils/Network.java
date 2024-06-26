@@ -39,7 +39,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 @InstallIn(SingletonComponent.class)
 public class Network {
-    private static final String BASE_URL = "http://192.168.1.149:8081/";
+    private static final String BASE_URL = "http://192.168.1.64:8081/";
 
     private static Retrofit retrofit = null;
 
