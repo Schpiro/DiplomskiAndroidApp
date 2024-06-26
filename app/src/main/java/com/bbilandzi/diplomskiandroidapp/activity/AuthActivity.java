@@ -2,6 +2,7 @@ package com.bbilandzi.diplomskiandroidapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -12,13 +13,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.bbilandzi.diplomskiandroidapp.R;
 import com.bbilandzi.diplomskiandroidapp.model.AuthRequest;
+import com.bbilandzi.diplomskiandroidapp.utils.AuthCallback;
 import com.bbilandzi.diplomskiandroidapp.viewmodel.AuthViewModel;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 
-public class AuthActivity extends AppCompatActivity {
+public class AuthActivity extends AppCompatActivity implements AuthCallback {
     AuthViewModel authViewModel;
 
     private EditText usernameEditText;
@@ -98,13 +100,11 @@ public class AuthActivity extends AppCompatActivity {
     }
 
     private void login() {
-        authViewModel.login(this, getLoginInfo());
-        goToContacts();
+        authViewModel.login(this, getLoginInfo(), this);
     }
 
     private void register() {
-        authViewModel.register(this, getLoginInfo());
-        goToContacts();
+        authViewModel.register(this, getLoginInfo(), this);
     }
 
     private AuthRequest getLoginInfo() {
@@ -130,4 +130,13 @@ public class AuthActivity extends AppCompatActivity {
         finish();
     }
 
+    @Override
+    public void onAuthSuccess(String token) {
+        goToContacts();
+    }
+
+    @Override
+    public void onAuthError(String errorMessage) {
+        Log.d("AuthActivity", "Failed to authenticate, try again!");
+    }
 }
