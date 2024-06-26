@@ -47,14 +47,12 @@ public class EventListActivity extends BaseActivity {
         recyclerView.setAdapter(eventAdapter);
 
         eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
-        // Observe the events LiveData
         eventViewModel.getEventsLiveData().observe(this, eventDTOS -> eventAdapter.updateEvents(eventDTOS));
 
         filter = findViewById(R.id.selected_date_filter);
         createButton = findViewById(R.id.create_button);
         filter.setOnClickListener(v -> openDatePicker());
         createButton.setOnClickListener(v -> openCreateEventDialog());
-        // Load events from ViewModel
         eventViewModel.getAllEvents();
     }
 

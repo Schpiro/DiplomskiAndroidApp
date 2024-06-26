@@ -75,14 +75,11 @@ public class EventDetailActivity extends AppCompatActivity {
         commentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         commentsRecyclerView.setAdapter(new CommentAdapter());
 
-        // Initialize ViewModel
         eventViewModel = new ViewModelProvider(this).get(EventViewModel.class);
         commentAdapter = new CommentAdapter();
         commentsRecyclerView.setAdapter(commentAdapter);
-        // Observe the comments LiveData
         eventViewModel.getCommentsLiveData().observe(this, commentDTOS -> commentAdapter.updateComments(commentDTOS));
 
-        // Load comments for the current event
         eventViewModel.getCommentsForEvent(event.getId());
 
         submitCommentButton.setOnClickListener(v -> {
@@ -103,7 +100,6 @@ public class EventDetailActivity extends AppCompatActivity {
         commentFilterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // Get the selected item
                 String selectedItem = parent.getItemAtPosition(position).toString();
                 List<CommentDTO> currentComments =  eventViewModel.getCommentsLiveData().getValue();
                 switch (selectedItem) {

@@ -96,13 +96,11 @@ public class MessengerActivity extends AppCompatActivity {
             userIdText.setText(message.getCreator());
 
             TextView timeText = messageView.findViewById(R.id.timeTextView);
-            // Assuming message.getTime() returns the time in a format you can directly display
             timeText.setText(DateTimeUtil.getIsoIntoHours(message.getCreationDate()));
 
             messagesContainer.addView(messageView);
         }
 
-        // Scroll to the bottom of the ScrollView after adding messages
         scrollView.post(() -> scrollView.fullScroll(View.FOCUS_DOWN));
     }
 

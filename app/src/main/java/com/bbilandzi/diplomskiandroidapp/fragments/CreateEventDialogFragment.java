@@ -71,7 +71,6 @@ public class CreateEventDialogFragment extends DialogFragment {
     public void onStart() {
         super.onStart();
         if (getDialog() != null) {
-            // Set the width of the dialog to match the parent
             getDialog().getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         }
     }

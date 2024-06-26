@@ -44,9 +44,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         EventDTO event = eventList.get(position);
         holder.bind(event);
         holder.itemView.setOnClickListener(v -> {
-            boolean expanded = event.isExpanded(); // Check current state
-            event.setExpanded(!expanded); // Toggle the state
-            notifyItemChanged(position); // Refresh item
+            boolean expanded = event.isExpanded();
+            event.setExpanded(!expanded);
+            notifyItemChanged(position);
         });
     }
 
@@ -84,7 +84,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             eventDetailsTextView = itemView.findViewById(R.id.eventDetails);
             openCommentsButton = itemView.findViewById(R.id.openCommentsButton);
 
-            // Set click listener for opening comments
             openCommentsButton.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
@@ -99,7 +98,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             eventDateTextView.setText(DateTimeUtil.getIsoIntoYearMonthDate(event.getDate()));
             eventLocationTextView.setText(event.getLocation());
 
-            // Toggle visibility of additional details
             if (event.isExpanded()) {
                 layoutDetails.setVisibility(View.VISIBLE);
                 eventCreatorTextView.setText("Creator: " + event.getCreator());

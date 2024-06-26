@@ -62,7 +62,6 @@ public class AuthUtils {
             byte[] decodedBytes = Base64.decode(payload, Base64.URL_SAFE);
             String decodedString = new String(decodedBytes, "UTF-8");
 
-            // Parse the JSON and extract the claim
             return getClaimFromJson(decodedString, claimKey);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

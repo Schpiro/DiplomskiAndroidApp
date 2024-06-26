@@ -58,7 +58,6 @@ public class Network {
                     .addInterceptor(new AuthInterceptor(AuthUtils.getToken(context)))
                     .build();
 
-            //OkHttpClient client = createOkHttpClient(context);
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .client(client)
@@ -175,7 +174,6 @@ public class Network {
 
     private static SSLSocketFactory getTrustAllHostsSSLSocketFactory() {
         try {
-            // Create a trust manager that does not validate certificate chains
             TrustManager[] trustAllCerts = new TrustManager[]{
                     new X509TrustManager() {
                         public X509Certificate[] getAcceptedIssuers() {
