@@ -2,6 +2,7 @@ package com.bbilandzi.diplomskiandroidapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,6 +29,13 @@ public class ProfileActivity extends BaseActivity{
 
         logoutButton.setOnClickListener(v -> logout());
         userName.setText(AuthUtils.getUsername(this));
+
+        Button startCallButton = findViewById(R.id.button_start_call);
+        startCallButton.setOnClickListener(v -> {
+            // Start the VideoCallActivity
+            Intent intent = new Intent(ProfileActivity.this, VideoCallActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void logout() {

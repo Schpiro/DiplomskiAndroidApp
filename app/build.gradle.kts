@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.viewpager2)
     implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.lifecycle.viewmodel)
+    implementation(libs.stream.webrtc.android)
     runtimeOnly(libs.recyclerview)
     annotationProcessor(libs.lombok)
     annotationProcessor(libs.hilt.android.compiler)

@@ -2,19 +2,15 @@ package com.bbilandzi.diplomskiandroidapp.activity;
 
 
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bbilandzi.diplomskiandroidapp.R;
 import com.bbilandzi.diplomskiandroidapp.adapter.ViewPagerAdapter;
-import com.bbilandzi.diplomskiandroidapp.fragments.CreateGroupDialogFragment;
 import com.bbilandzi.diplomskiandroidapp.fragments.GroupListFragment;
 import com.bbilandzi.diplomskiandroidapp.fragments.UserListFragment;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-
-import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
