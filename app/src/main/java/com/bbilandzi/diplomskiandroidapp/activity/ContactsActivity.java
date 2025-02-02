@@ -31,6 +31,9 @@ public class ContactsActivity extends BaseActivity{
         ).attach();
     }
 
+    @Override
+    protected void onClose(Bundle savedInstanceState) {}
+
     private void setupViewPager(ViewPager2 viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(this);
         adapter.addFragment(new UserListFragment());

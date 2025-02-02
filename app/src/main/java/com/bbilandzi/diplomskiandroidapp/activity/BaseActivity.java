@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bbilandzi.diplomskiandroidapp.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private ViewGroup container;
 
@@ -77,4 +77,6 @@ public class BaseActivity extends AppCompatActivity {
         container.removeAllViews();
         LayoutInflater.from(this).inflate(layoutResID, container, true);
     }
+
+    protected abstract void onClose(Bundle savedInstanceState);
 }

@@ -1,5 +1,7 @@
 package com.bbilandzi.diplomskiandroidapp.activity;
 
+
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bbilandzi.diplomskiandroidapp.R;
@@ -21,6 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 
 public class AuthActivity extends AppCompatActivity implements AuthCallback {
+    private static final int REQUEST_PERMISSIONS = 1;
     AuthViewModel authViewModel;
 
     private EditText usernameEditText;
@@ -35,6 +39,11 @@ public class AuthActivity extends AppCompatActivity implements AuthCallback {
         if (isLogin) {
             setContentView(R.layout.activity_login);
             setupLoginViews();
+                ActivityCompat.requestPermissions(this, new String[]{
+                        Manifest.permission.INTERNET,
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.RECORD_AUDIO
+                }, REQUEST_PERMISSIONS);
         } else {
             setContentView(R.layout.activity_register);
             setupRegisterViews();

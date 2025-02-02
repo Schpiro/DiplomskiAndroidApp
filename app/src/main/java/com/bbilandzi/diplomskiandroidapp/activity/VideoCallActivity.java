@@ -3,7 +3,8 @@ package com.bbilandzi.diplomskiandroidapp.activity;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.PowerManager;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -11,29 +12,56 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.bbilandzi.diplomskiandroidapp.R;
-import com.bbilandzi.diplomskiandroidapp.utils.WebRTCClient;
+import com.bbilandzi.diplomskiandroidapp.utils.webrtc.PeerConnectionObserver;
+import com.bbilandzi.diplomskiandroidapp.utils.webrtc.WebRTCClient;
 
+import org.webrtc.IceCandidate;
+import org.webrtc.MediaStream;
+import org.webrtc.RtpReceiver;
 import org.webrtc.SurfaceViewRenderer;
 import org.webrtc.VideoTrack;
-
-import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class VideoCallActivity extends BaseActivity{
-
+public class VideoCallActivity extends BaseActivity {
     private static final int REQUEST_PERMISSIONS = 1;
     private WebRTCClient webRTCManager;
     private SurfaceViewRenderer localRenderer;
     private SurfaceViewRenderer remoteRenderer;
+    private Button makeCallButton;
+
+    private PowerManager.WakeLock wakeLock;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_call);
-        webRTCManager = new WebRTCClient(this);
+        localRenderer = findViewById(R.id.local_surface_view);
+        remoteRenderer = findViewById(R.id.remote_surface_view);
+        makeCallButton = findViewById(R.id.btn_make_call);
+
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                "Diplomski::VideoCallActive");
+        wakeLock.acquire(5 * 60 * 1000L);
+        this.webRTCManager = new WebRTCClient(this, new PeerConnectionObserver() {
+            @Override
+            public void onAddTrack(RtpReceiver receiver, MediaStream[] mediaStreams) {
+                super.onAddTrack(receiver, mediaStreams);
+                if (receiver.track() instanceof VideoTrack) {
+                    VideoTrack videoTrack = (VideoTrack) receiver.track();
+                    videoTrack.addSink(remoteRenderer);
+                }
+            }
+
+            @Override
+            public void onIceCandidate(IceCandidate iceCandidate) {
+                super.onIceCandidate(iceCandidate);
+                webRTCManager.sendIceCandidate(iceCandidate);
+            }
+        });
 
         if (!hasPermissions()) {
             ActivityCompat.requestPermissions(this, new String[]{
@@ -41,9 +69,23 @@ public class VideoCallActivity extends BaseActivity{
                     Manifest.permission.CAMERA,
                     Manifest.permission.RECORD_AUDIO
             }, REQUEST_PERMISSIONS);
-        } else {
-            initializeWebRTC();
         }
+
+        initialize();
+    }
+
+    @Override
+    protected void onClose(Bundle savedInstanceState) {
+        wakeLock.release();
+    }
+
+    private void initialize() {
+        initLocalView(localRenderer);
+        initRemoteView(remoteRenderer);
+
+        makeCallButton.setOnClickListener(v->{
+            startCall("2");
+        });
     }
 
     private boolean hasPermissions() {
@@ -51,47 +93,29 @@ public class VideoCallActivity extends BaseActivity{
                 ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED;
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_PERMISSIONS) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                initializeWebRTC();
+                initialize();
             } else {
                 Toast.makeText(this, "Permissions are required for WebRTC to work.", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    private void initializeWebRTC() {
-        Log.d("VideoCallActivity", "Initializing WebRTC");
-        localRenderer = findViewById(R.id.local_surface_view);
-        remoteRenderer = findViewById(R.id.local_surface_view);
-
-        if (localRenderer != null) {
-            localRenderer.init(webRTCManager.getEglBase().getEglBaseContext(), null);
-            localRenderer.setMirror(true);
-            Log.d("VideoCallActivity", "SurfaceViewRenderer initialized");
-            VideoTrack videoTrack = webRTCManager.setupLocalRenderer();
-            videoTrack.addSink(localRenderer);
-            videoTrack.setEnabled(true);
-        } else {
-            Log.e("VideoCallActivity", "SurfaceViewRenderer is null");
-        }
+    public void initLocalView(SurfaceViewRenderer view) {
+        webRTCManager.initLocalSurfaceView(view);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (webRTCManager != null) {
-            webRTCManager.dispose();
-        }
-        if (localRenderer != null) {
-            localRenderer.release();
-        }
-        if (remoteRenderer != null) {
-            remoteRenderer.release();
-        }
-        Log.d("VideoCallActivity", "Resources disposed");
+    public void initRemoteView(SurfaceViewRenderer view) {
+        webRTCManager.initRemoteSurfaceView(view);
     }
+
+    public void startCall(String target) {
+        webRTCManager.call(target);
+    }
+
 }

@@ -5,14 +5,9 @@ import static com.bbilandzi.diplomskiandroidapp.utils.DateTimeUtil.getDateInMill
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Switch;
-import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -55,6 +50,9 @@ public class EventListActivity extends BaseActivity {
         createButton.setOnClickListener(v -> openCreateEventDialog());
         eventViewModel.getAllEvents();
     }
+
+    @Override
+    protected void onClose(Bundle savedInstanceState) {}
 
     private void onEventClick(EventDTO event) {
         Intent intent = new Intent(this, EventDetailActivity.class);
