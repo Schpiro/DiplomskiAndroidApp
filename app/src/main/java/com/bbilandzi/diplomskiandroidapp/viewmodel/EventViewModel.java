@@ -43,9 +43,9 @@ public class EventViewModel extends ViewModel {
     private boolean oldestFirstFilter = false;
 
     @Inject
-    public EventViewModel(EventRepository eventRepository) {
+    public EventViewModel(EventRepository eventRepository, WebSocketManager webSocketManager) {
         this.eventRepository = eventRepository;
-        this.webSocketManager = WebSocketManager.getInstance();
+        this.webSocketManager = webSocketManager;
         webSocketManager.getMessageLiveData(NEW_COMMENT).observeForever(this::onNewCommentReceived);
         webSocketManager.getMessageLiveData(NEW_EVENT).observeForever(this::onNewEventReceived);
     }

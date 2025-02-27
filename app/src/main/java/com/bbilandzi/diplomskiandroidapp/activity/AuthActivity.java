@@ -24,7 +24,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 
 public class AuthActivity extends AppCompatActivity implements AuthCallback {
-    private static final int REQUEST_PERMISSIONS = 1;
     AuthViewModel authViewModel;
 
     private EditText usernameEditText;
@@ -42,8 +41,9 @@ public class AuthActivity extends AppCompatActivity implements AuthCallback {
                 ActivityCompat.requestPermissions(this, new String[]{
                         Manifest.permission.INTERNET,
                         Manifest.permission.CAMERA,
-                        Manifest.permission.RECORD_AUDIO
-                }, REQUEST_PERMISSIONS);
+                        Manifest.permission.RECORD_AUDIO,
+                        Manifest.permission.POST_NOTIFICATIONS
+                }, 1);
         } else {
             setContentView(R.layout.activity_register);
             setupRegisterViews();
@@ -120,14 +120,8 @@ public class AuthActivity extends AppCompatActivity implements AuthCallback {
         String username = usernameEditText.getText().toString();
         String password = passwordEditText.getText().toString();
 
-        boolean testing = false ;
-        if(testing) {
-            username = "admin";
-            password = "admin";
-        } else {
-            if (username.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Please fill in both fields", Toast.LENGTH_SHORT).show();
-            }
+        if (username.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Please fill in both fields", Toast.LENGTH_SHORT).show();
         }
 
         return new AuthRequest(username, password);

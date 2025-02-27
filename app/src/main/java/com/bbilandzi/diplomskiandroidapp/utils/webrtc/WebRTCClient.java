@@ -36,6 +36,8 @@ import org.webrtc.VideoTrack;
 
 import java.util.Collections;
 
+import javax.inject.Inject;
+
 public class WebRTCClient {
     private final Gson gson = new Gson();
     private final Context context;
@@ -52,10 +54,12 @@ public class WebRTCClient {
     private AudioTrack localAudioTrack;
     private MediaStream localStream;
     private MediaConstraints mediaConstraints = new MediaConstraints();
-    WebSocketManager webSocketManager = WebSocketManager.getInstance();
+    WebSocketManager webSocketManager;
 
 
-    public WebRTCClient(Context context, PeerConnection.Observer observer) {
+    @Inject
+    public WebRTCClient(Context context, PeerConnection.Observer observer, WebSocketManager webSocketManager) {
+        this.webSocketManager = webSocketManager;
         this.context = context;
         initPeerConnectionFactory();
         peerConnectionFactory = createPeerConnectionFactory();

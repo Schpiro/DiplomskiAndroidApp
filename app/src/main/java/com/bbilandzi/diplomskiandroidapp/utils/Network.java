@@ -91,6 +91,12 @@ public class Network {
         return new EventRepository(client);
     }
 
+    @Provides
+    @Singleton
+    public WebSocketManager getWebSocketManager() {
+        return new WebSocketManager();
+    }
+
     private static OkHttpClient createOkHttpClient(Context context) {
         OkHttpClient.Builder client = new OkHttpClient.Builder();
 

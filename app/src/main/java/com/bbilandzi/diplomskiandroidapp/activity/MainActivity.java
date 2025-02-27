@@ -1,10 +1,7 @@
 package com.bbilandzi.diplomskiandroidapp.activity;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -26,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
             navigateTo(AuthActivity.class);
         }
 
-        webSocketManager = WebSocketManager.getInstance();
+        this.webSocketManager = new WebSocketManager();
         webSocketManager.start(this);
 
         finish();

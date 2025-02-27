@@ -1,7 +1,6 @@
 package com.bbilandzi.diplomskiandroidapp.viewmodel;
 
 import static com.bbilandzi.diplomskiandroidapp.utils.MessageTypes.NEW_GROUP;
-import static com.bbilandzi.diplomskiandroidapp.utils.MessageTypes.NEW_MESSAGE;
 
 import android.util.Log;
 
@@ -36,8 +35,8 @@ public class ContactViewModel extends ViewModel {
 
 
     @Inject
-    public ContactViewModel(ContactsRepository contactsRepository) {
-        this.webSocketManager = WebSocketManager.getInstance();
+    public ContactViewModel(ContactsRepository contactsRepository, WebSocketManager webSocketManager) {
+        this.webSocketManager = webSocketManager;
         this.contactsRepository = contactsRepository;
         webSocketManager.getMessageLiveData(NEW_GROUP).observeForever(this::onNewUserGroupReceived);
     }

@@ -12,6 +12,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.bbilandzi.diplomskiandroidapp.R;
+import com.bbilandzi.diplomskiandroidapp.utils.WebSocketManager;
 import com.bbilandzi.diplomskiandroidapp.utils.webrtc.PeerConnectionObserver;
 import com.bbilandzi.diplomskiandroidapp.utils.webrtc.WebRTCClient;
 
@@ -52,6 +53,7 @@ public class VideoCallActivity extends BaseActivity {
                 super.onAddTrack(receiver, mediaStreams);
                 if (receiver.track() instanceof VideoTrack) {
                     VideoTrack videoTrack = (VideoTrack) receiver.track();
+                    assert videoTrack != null;
                     videoTrack.addSink(remoteRenderer);
                 }
             }
@@ -61,7 +63,7 @@ public class VideoCallActivity extends BaseActivity {
                 super.onIceCandidate(iceCandidate);
                 webRTCManager.sendIceCandidate(iceCandidate);
             }
-        });
+        }, new WebSocketManager());
 
         if (!hasPermissions()) {
             ActivityCompat.requestPermissions(this, new String[]{
@@ -83,9 +85,7 @@ public class VideoCallActivity extends BaseActivity {
         initLocalView(localRenderer);
         initRemoteView(remoteRenderer);
 
-        makeCallButton.setOnClickListener(v->{
-            startCall("2");
-        });
+        makeCallButton.setOnClickListener(v-> startCall("2"));
     }
 
     private boolean hasPermissions() {

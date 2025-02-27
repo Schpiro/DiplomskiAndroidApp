@@ -3,7 +3,7 @@ package com.bbilandzi.diplomskiandroidapp.model;
 import lombok.Getter;
 
 @Getter
-public class AuthResponse {
+public class LoginDTO {
     private String jwt;
 
 }

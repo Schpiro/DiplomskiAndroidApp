@@ -39,8 +39,8 @@ public class MessageViewModel extends ViewModel {
     private Long currentRecipientId;
     private boolean currentIsGroupChat;
     @Inject
-    public MessageViewModel(MessageRepository messageRepository) {
-        this.webSocketManager = WebSocketManager.getInstance();
+    public MessageViewModel(MessageRepository messageRepository, WebSocketManager webSocketManager) {
+        this.webSocketManager = webSocketManager;
         this.messageRepository = messageRepository;
         webSocketManager.getMessageLiveData(NEW_MESSAGE).observeForever(this::onNewMessageReceived);
     }
