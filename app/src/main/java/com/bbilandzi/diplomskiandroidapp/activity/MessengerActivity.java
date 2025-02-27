@@ -21,6 +21,7 @@ import com.bbilandzi.diplomskiandroidapp.utils.DateTimeUtil;
 import com.bbilandzi.diplomskiandroidapp.viewmodel.MessageViewModel;
 
 import java.util.List;
+import java.util.Objects;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -55,7 +56,7 @@ public class MessengerActivity extends AppCompatActivity {
 
         recipientId = getIntent().getLongExtra("recipientId", 1);
 
-        if (getIntent().getStringExtra("recipientType").equals("user")) {
+        if (Objects.equals(getIntent().getStringExtra("recipientType"), "user")) {
             recipientName.setText(getIntent().getStringExtra("recipientUsername"));
             messageViewModel.getConversationWithUser(recipientId);
         } else {
