@@ -1,10 +1,8 @@
 package com.bbilandzi.diplomskiandroidapp.adapter;
 
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,10 +14,7 @@ import com.bbilandzi.diplomskiandroidapp.R;
 import com.bbilandzi.diplomskiandroidapp.model.EventDTO;
 import com.bbilandzi.diplomskiandroidapp.utils.DateTimeUtil;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Locale;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
 

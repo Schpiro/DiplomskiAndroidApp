@@ -6,6 +6,7 @@ import static com.bbilandzi.diplomskiandroidapp.utils.MessageTypes.PRIVATE_MESSA
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -58,16 +59,17 @@ public class MessageViewModel extends ViewModel {
 
         call.enqueue(new Callback<List<MessageDTO>>() {
             @Override
-            public void onResponse(Call<List<MessageDTO>> call, Response<List<MessageDTO>> response) {
+            public void onResponse(@NonNull Call<List<MessageDTO>> call, @NonNull Response<List<MessageDTO>> response) {
                 if (response.isSuccessful()) {
                     List<MessageDTO> message = response.body();
                     fetchedMessages.postValue(message);
+                    assert message != null;
                     Log.d("MessageViewModel", message.toString());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<MessageDTO>> call, Throwable throwable) {
+            public void onFailure(@NonNull Call<List<MessageDTO>> call, @NonNull Throwable throwable) {
                 Log.e("MessageViewModel Error", "Failed: " + throwable.getMessage());
             }
         });
@@ -78,16 +80,17 @@ public class MessageViewModel extends ViewModel {
 
         call.enqueue(new Callback<List<MessageDTO>>() {
             @Override
-            public void onResponse(Call<List<MessageDTO>> call, Response<List<MessageDTO>> response) {
+            public void onResponse(@NonNull Call<List<MessageDTO>> call, @NonNull Response<List<MessageDTO>> response) {
                 if (response.isSuccessful()) {
                     List<MessageDTO> message = response.body();
                     fetchedMessages.postValue(message);
+                    assert message != null;
                     Log.d("MessageViewModel", message.toString());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<MessageDTO>> call, Throwable throwable) {
+            public void onFailure(@NonNull Call<List<MessageDTO>> call, @NonNull Throwable throwable) {
                 Log.e("MessageViewModel Error", "Failed: " + throwable.getMessage());
             }
         });
@@ -98,7 +101,7 @@ public class MessageViewModel extends ViewModel {
 
         call.enqueue(new Callback<MessageDTO>() {
             @Override
-            public void onResponse(Call<MessageDTO> call, Response<MessageDTO> response) {
+            public void onResponse(@NonNull Call<MessageDTO> call, @NonNull Response<MessageDTO> response) {
                 if (response.isSuccessful()) {
                     MessageDTO messageDTO = response.body();
                     WebsocketMessageDTO message = new WebsocketMessageDTO();
@@ -110,7 +113,7 @@ public class MessageViewModel extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<MessageDTO> call, Throwable throwable) {
+            public void onFailure(@NonNull Call<MessageDTO> call, @NonNull Throwable throwable) {
                 Log.e("MessageViewModel Error", "Failed: " + throwable.getMessage());
             }
         });

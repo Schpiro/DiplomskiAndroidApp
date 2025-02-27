@@ -1,7 +1,5 @@
 package com.bbilandzi.diplomskiandroidapp.adapter;
 
-import static java.security.AccessController.getContext;
-
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -15,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bbilandzi.diplomskiandroidapp.R;
 import com.bbilandzi.diplomskiandroidapp.activity.MessengerActivity;
 import com.bbilandzi.diplomskiandroidapp.model.UserDTO;
-import com.bbilandzi.diplomskiandroidapp.model.UserGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +46,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
     public static class UserViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView textViewName;
+        private final TextView textViewName;
 
         public UserViewHolder(@NonNull View itemView) {
             super(itemView);

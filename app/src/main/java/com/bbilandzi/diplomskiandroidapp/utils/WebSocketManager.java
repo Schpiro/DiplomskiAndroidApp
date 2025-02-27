@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -58,7 +59,7 @@ public class WebSocketManager {
         createNotificationChannel();
         webSocket = client.newWebSocket(request, new WebSocketListener() {
             @Override
-            public void onOpen(WebSocket webSocket, Response response) {
+            public void onOpen(@NonNull WebSocket webSocket, @NonNull Response response) {
                 Log.d(TAG, "WebSocket opened: " + response);
                 WebsocketMessageDTO message = new WebsocketMessageDTO();
                 message.setType(CLIENT_ID);
@@ -67,7 +68,7 @@ public class WebSocketManager {
             }
 
             @Override
-            public void onMessage(WebSocket webSocket, String text) {
+            public void onMessage(@NonNull WebSocket webSocket, @NonNull String text) {
                 Log.d(TAG, "Message received: " + text);
                 WebsocketMessageDTO message = new Gson().fromJson(text, WebsocketMessageDTO.class);
                 MutableLiveData<WebsocketMessageDTO> liveData = messageTypeLiveDataMap.get(message.getType());
@@ -78,12 +79,12 @@ public class WebSocketManager {
             }
 
             @Override
-            public void onClosing(WebSocket webSocket, int code, String reason) {
+            public void onClosing(@NonNull WebSocket webSocket, int code, @NonNull String reason) {
                 Log.d(TAG, "WebSocket closing: " + reason);
             }
 
             @Override
-            public void onFailure(WebSocket webSocket, Throwable t, Response response) {
+            public void onFailure(@NonNull WebSocket webSocket, @NonNull Throwable t, Response response) {
                 Log.e(TAG, "WebSocket error: " + t.getMessage());
             }
         });
@@ -125,6 +126,7 @@ public class WebSocketManager {
         NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
         channel.setDescription(description);
         NotificationManager notificationManager = getSystemService(context, NotificationManager.class);
+        assert notificationManager != null;
         notificationManager.createNotificationChannel(channel);
     }
 

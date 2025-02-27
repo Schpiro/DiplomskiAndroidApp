@@ -1,16 +1,11 @@
 package com.bbilandzi.diplomskiandroidapp.fragments;
 
-import static com.bbilandzi.diplomskiandroidapp.utils.DateTimeUtil.getDateInMillis;
 
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
@@ -23,15 +18,13 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.bbilandzi.diplomskiandroidapp.R;
-import com.bbilandzi.diplomskiandroidapp.model.EventDTO;
 import com.bbilandzi.diplomskiandroidapp.model.UserDTO;
 import com.bbilandzi.diplomskiandroidapp.model.UserGroup;
-import com.bbilandzi.diplomskiandroidapp.utils.AuthUtils;
-import com.bbilandzi.diplomskiandroidapp.viewmodel.AuthViewModel;
 import com.bbilandzi.diplomskiandroidapp.viewmodel.ContactViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -86,14 +79,14 @@ public class CreateGroupDialogFragment extends DialogFragment {
         if (getDialog() != null) {
             int width = WindowManager.LayoutParams.MATCH_PARENT;
             int height = WindowManager.LayoutParams.WRAP_CONTENT;
-            getDialog().getWindow().setLayout(width, height);
+            Objects.requireNonNull(getDialog().getWindow()).setLayout(width, height);
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Window window = getDialog().getWindow();
+        Window window = Objects.requireNonNull(getDialog()).getWindow();
         if (window != null) {
             WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
             lp.copyFrom(window.getAttributes());

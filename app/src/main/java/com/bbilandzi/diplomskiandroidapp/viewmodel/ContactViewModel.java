@@ -4,6 +4,7 @@ import static com.bbilandzi.diplomskiandroidapp.utils.MessageTypes.NEW_GROUP;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -52,16 +53,17 @@ public class ContactViewModel extends ViewModel {
     public void getAllUsers() {
         contactsRepository.getAllUsers().enqueue(new Callback<List<UserDTO>>() {
             @Override
-            public void onResponse(Call<List<UserDTO>> call, Response<List<UserDTO>> response) {
+            public void onResponse(@NonNull Call<List<UserDTO>> call, @NonNull Response<List<UserDTO>> response) {
                 if (response.isSuccessful()) {
                     List<UserDTO> users = response.body();
                     fetchedUsers.setValue(users);
+                    assert users != null;
                     Log.d("ContactViewModel", users.toString());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<UserDTO>> call, Throwable throwable) {
+            public void onFailure(@NonNull Call<List<UserDTO>> call, @NonNull Throwable throwable) {
                 Log.e("ContactViewModel Error", "Failed: " + throwable.getMessage());
             }
         });
@@ -70,16 +72,17 @@ public class ContactViewModel extends ViewModel {
     public void getAllUserGroups() {
         contactsRepository.getAllUserGroups().enqueue(new Callback<List<UserGroup>>() {
             @Override
-            public void onResponse(Call<List<UserGroup>> call, Response<List<UserGroup>> response) {
+            public void onResponse(@NonNull Call<List<UserGroup>> call, @NonNull Response<List<UserGroup>> response) {
                 if (response.isSuccessful()) {
                     List<UserGroup> groups = response.body();
                     fetchedGroups.setValue(groups);
+                    assert groups != null;
                     Log.d("ContactViewModel", groups.toString());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<UserGroup>> call, Throwable throwable) {
+            public void onFailure(@NonNull Call<List<UserGroup>> call, @NonNull Throwable throwable) {
                 Log.e("ContactViewModel Error", "Failed: " + throwable.getMessage());
             }
         });
@@ -88,19 +91,20 @@ public class ContactViewModel extends ViewModel {
     public void createMessageGroup(UserGroup userGroup) {
         contactsRepository.createMessageGroup(userGroup).enqueue(new Callback<UserGroup>() {
             @Override
-            public void onResponse(Call<UserGroup> call, Response<UserGroup> response) {
+            public void onResponse(@NonNull Call<UserGroup> call, @NonNull Response<UserGroup> response) {
                 if (response.isSuccessful()) {
                     UserGroup group = response.body();
                     WebsocketMessageDTO message = new WebsocketMessageDTO();
                     message.setType(NEW_GROUP);
                     message.setPayload(gson.toJson(group));
                     webSocketManager.sendMessage(message);
+                    assert group != null;
                     Log.d("ContactViewModel", group.toString());
                 }
             }
 
             @Override
-            public void onFailure(Call<UserGroup> call, Throwable throwable) {
+            public void onFailure(@NonNull Call<UserGroup> call, @NonNull Throwable throwable) {
                 Log.e("ContactViewModel Error", "Failed: " + throwable.getMessage());
             }
         });

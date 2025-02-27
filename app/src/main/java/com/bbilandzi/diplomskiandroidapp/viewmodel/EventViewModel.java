@@ -5,6 +5,7 @@ import static com.bbilandzi.diplomskiandroidapp.utils.MessageTypes.NEW_EVENT;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -61,9 +62,10 @@ public class EventViewModel extends ViewModel {
     public void getAllEvents() {
         eventRepository.getAllEvents().enqueue(new Callback<List<EventDTO>>() {
             @Override
-            public void onResponse(Call<List<EventDTO>> call, Response<List<EventDTO>> response) {
+            public void onResponse(@NonNull Call<List<EventDTO>> call, @NonNull Response<List<EventDTO>> response) {
                 if (response.isSuccessful()) {
                     List<EventDTO> events = response.body();
+                    assert events != null;
                     events.sort(DateTimeUtil.eventDateComparator());
                     eventsLiveData.setValue(events);
                     originalEvents.clear();
@@ -74,7 +76,7 @@ public class EventViewModel extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<List<EventDTO>> call, Throwable throwable) {
+            public void onFailure(@NonNull Call<List<EventDTO>> call, @NonNull Throwable throwable) {
                 Log.e("EventViewModel", "getAllEvents: Failed", throwable);
             }
         });
@@ -104,9 +106,10 @@ public class EventViewModel extends ViewModel {
     public void getCommentsForEvent(Long eventId) {
         eventRepository.getCommentsForEvent(eventId).enqueue(new Callback<List<CommentDTO>>() {
             @Override
-            public void onResponse(Call<List<CommentDTO>> call, Response<List<CommentDTO>> response) {
+            public void onResponse(@NonNull Call<List<CommentDTO>> call, @NonNull Response<List<CommentDTO>> response) {
                 if (response.isSuccessful()) {
                     List<CommentDTO> comments = response.body();
+                    assert comments != null;
                     comments.sort(oldestFirstFilter ? DateTimeUtil.commentDateComparatorReverse() : DateTimeUtil.commentDateComparator());
                     commentsLiveData.setValue(comments);
                     Log.d("EventViewModel", "getCommentsForEvent: " + comments);
@@ -116,7 +119,7 @@ public class EventViewModel extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<List<CommentDTO>> call, Throwable throwable) {
+            public void onFailure(@NonNull Call<List<CommentDTO>> call, @NonNull Throwable throwable) {
                 Log.e("EventViewModel", "getCommentsForEvent: Failed", throwable);
             }
         });
@@ -125,7 +128,7 @@ public class EventViewModel extends ViewModel {
     public void createEvent(EventDTO eventDTO) {
         eventRepository.createEvent(eventDTO).enqueue(new Callback<EventDTO>() {
             @Override
-            public void onResponse(Call<EventDTO> call, Response<EventDTO> response) {
+            public void onResponse(@NonNull Call<EventDTO> call, @NonNull Response<EventDTO> response) {
                 if (response.isSuccessful()) {
                     EventDTO eventDTO = response.body();
                     Log.d("EventViewModel", "createEvent: " + eventDTO);
@@ -139,7 +142,7 @@ public class EventViewModel extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<EventDTO> call, Throwable throwable) {
+            public void onFailure(@NonNull Call<EventDTO> call, @NonNull Throwable throwable) {
                 Log.e("EventViewModel", "createEvent: Failed", throwable);
             }
         });
@@ -148,7 +151,7 @@ public class EventViewModel extends ViewModel {
     public void createCommentForEvent(Long eventId, CommentDTO commentDTO) {
         eventRepository.createCommentForEvent(eventId, commentDTO).enqueue(new Callback<CommentDTO>() {
             @Override
-            public void onResponse(Call<CommentDTO> call, Response<CommentDTO> response) {
+            public void onResponse(@NonNull Call<CommentDTO> call, @NonNull Response<CommentDTO> response) {
                 if (response.isSuccessful()) {
                     CommentDTO createdComment = response.body();
                     Log.d("EventViewModel", "createCommentForEvent: " + createdComment);
@@ -162,7 +165,7 @@ public class EventViewModel extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<CommentDTO> call, Throwable throwable) {
+            public void onFailure(@NonNull Call<CommentDTO> call, @NonNull Throwable throwable) {
                 Log.e("EventViewModel", "createCommentForEvent: Failed", throwable);
             }
         });

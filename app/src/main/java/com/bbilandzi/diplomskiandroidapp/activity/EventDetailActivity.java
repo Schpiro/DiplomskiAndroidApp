@@ -24,7 +24,6 @@ import com.bbilandzi.diplomskiandroidapp.utils.DateTimeUtil;
 import com.bbilandzi.diplomskiandroidapp.viewmodel.EventViewModel;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -104,10 +103,12 @@ public class EventDetailActivity extends AppCompatActivity {
                 List<CommentDTO> currentComments =  eventViewModel.getCommentsLiveData().getValue();
                 switch (selectedItem) {
                     case "Oldest first":
+                        assert currentComments != null;
                         currentComments.sort(DateTimeUtil.commentDateComparatorReverse());
                         eventViewModel.setOldestFirstFilter(true);
                         break;
                     case "Newest first":
+                        assert currentComments != null;
                         currentComments.sort(DateTimeUtil.commentDateComparator());
                         eventViewModel.setOldestFirstFilter(false);
                         break;

@@ -3,7 +3,6 @@ package com.bbilandzi.diplomskiandroidapp.fragments;
 import static com.bbilandzi.diplomskiandroidapp.utils.DateTimeUtil.getDateInMillis;
 
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,7 @@ import com.bbilandzi.diplomskiandroidapp.model.EventDTO;
 import com.bbilandzi.diplomskiandroidapp.utils.AuthUtils;
 import com.bbilandzi.diplomskiandroidapp.viewmodel.EventViewModel;
 
-import java.util.Calendar;
+import java.util.Objects;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -71,7 +70,7 @@ public class CreateEventDialogFragment extends DialogFragment {
     public void onStart() {
         super.onStart();
         if (getDialog() != null) {
-            getDialog().getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+            Objects.requireNonNull(getDialog().getWindow()).setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         }
     }
 }

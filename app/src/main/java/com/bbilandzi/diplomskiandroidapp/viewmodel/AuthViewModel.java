@@ -3,6 +3,7 @@ package com.bbilandzi.diplomskiandroidapp.viewmodel;
 import android.content.Context;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 
 import com.bbilandzi.diplomskiandroidapp.model.AuthRequest;
@@ -32,7 +33,7 @@ public class AuthViewModel extends ViewModel {
         authRepository.login(authRequest)
                 .enqueue(new Callback<LoginDTO>() {
                     @Override
-                    public void onResponse(Call<LoginDTO> call, Response<LoginDTO> response) {
+                    public void onResponse(@NonNull Call<LoginDTO> call, @NonNull Response<LoginDTO> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             String token = response.body().getJwt();
                             Log.d("Login Success", "JWT Token: " + token);
@@ -44,7 +45,7 @@ public class AuthViewModel extends ViewModel {
                     }
 
                     @Override
-                    public void onFailure(Call<LoginDTO> call, Throwable throwable) {
+                    public void onFailure(@NonNull Call<LoginDTO> call, @NonNull Throwable throwable) {
                         Log.e("Login Error", "Failed to connect to authentication server: " + throwable.getMessage());
                         callback.onAuthError("Failed to authenticate user"); // Notify error
                     }
@@ -55,7 +56,7 @@ public class AuthViewModel extends ViewModel {
         authRepository.register(authRequest)
                 .enqueue(new Callback<LoginDTO>() {
                     @Override
-                    public void onResponse(Call<LoginDTO> call, Response<LoginDTO> response) {
+                    public void onResponse(@NonNull Call<LoginDTO> call, @NonNull Response<LoginDTO> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             String token = response.body().getJwt();
                             Log.d("Registration Success", "JWT Token: " + token);
@@ -68,7 +69,7 @@ public class AuthViewModel extends ViewModel {
                     }
 
                     @Override
-                    public void onFailure(Call<LoginDTO> call, Throwable throwable) {
+                    public void onFailure(@NonNull Call<LoginDTO> call, @NonNull Throwable throwable) {
                         Log.e("Registration Error", "Failed to connect to authentication server: " + throwable.getMessage());
 
                     }

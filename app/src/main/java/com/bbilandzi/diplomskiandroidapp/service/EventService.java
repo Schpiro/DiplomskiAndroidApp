@@ -2,8 +2,6 @@ package com.bbilandzi.diplomskiandroidapp.service;
 
 import com.bbilandzi.diplomskiandroidapp.model.CommentDTO;
 import com.bbilandzi.diplomskiandroidapp.model.EventDTO;
-import com.bbilandzi.diplomskiandroidapp.model.EventSend;
-import com.bbilandzi.diplomskiandroidapp.model.MessageDTO;
 
 import java.util.List;
 
