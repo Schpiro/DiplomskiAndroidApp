@@ -13,19 +13,16 @@
         android:layout_marginTop="?attr/actionBarSize"
         android:layout_marginBottom="80dp" />
 
-    <Button
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/openDialogButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:layout_marginEnd="25dp"
         android:layout_marginBottom="90dp"
-        android:background="@drawable/round_button_background"
-        android:text="+"
-        android:textSize="20sp"
-        android:textColor="@android:color/white"
-        android:elevation="4dp"
-        android:padding="20dp"/>
+        android:src="@android:drawable/ic_input_add"
+        android:elevation="6dp"
+        />
 
 </RelativeLayout>

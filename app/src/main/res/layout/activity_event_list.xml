@@ -18,10 +18,11 @@
             android:id="@+id/selected_date_filter"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_filter_funnel"
+            android:src="@drawable/calendar_week"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:scaleType="fitCenter"/>
+
 
         <!-- Spacer View to take up remaining space -->
         <View
@@ -29,15 +30,14 @@
             android:layout_height="0dp"
             android:layout_weight="1"/>
 
-        <!-- Create Button -->
-        <Button
+        <!-- Floating Action Button with + icon -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/create_button"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/round_button_background"
-            android:padding="0dp"
-            android:text="+"
-            android:layout_marginEnd="16dp"/>
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="16dp"
+            android:src="@android:drawable/ic_input_add"
+            android:elevation="6dp" /> <!-- Customize the FAB size if needed -->
 
     </LinearLayout>
 

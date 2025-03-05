@@ -14,6 +14,7 @@ import com.bbilandzi.diplomskiandroidapp.model.MessageDTO;
 import com.bbilandzi.diplomskiandroidapp.model.MessageSend;
 import com.bbilandzi.diplomskiandroidapp.model.WebsocketMessageDTO;
 import com.bbilandzi.diplomskiandroidapp.repository.MessageRepository;
+import com.bbilandzi.diplomskiandroidapp.utils.AuthUtils;
 import com.bbilandzi.diplomskiandroidapp.utils.WebSocketManager;
 import com.google.gson.Gson;
 
@@ -43,6 +44,7 @@ public class MessageViewModel extends ViewModel {
         this.webSocketManager = WebSocketManager.getInstance();
         this.messageRepository = messageRepository;
         webSocketManager.getMessageLiveData(NEW_MESSAGE).observeForever(this::onNewMessageReceived);
+        webSocketManager.getMessageLiveData(PRIVATE_MESSAGE).observeForever(this::onNewMessageReceived);
     }
 
     public void setCurrentChatDetails(Long recipientId, boolean isGroupChat) {
@@ -104,6 +106,12 @@ public class MessageViewModel extends ViewModel {
                     WebsocketMessageDTO message = new WebsocketMessageDTO();
                     message.setType(isGroupChat ? GROUP_MESSAGE : PRIVATE_MESSAGE);
                     message.setPayload(gson.toJson(messageDTO));
+                    List<MessageDTO> currentList = fetchedMessages.getValue();
+                    if (currentList == null) {
+                        currentList = new ArrayList<>();
+                    }
+                    currentList.add(messageDTO);
+                    fetchedMessages.postValue(currentList);
                     webSocketManager.sendMessage(message);
                     Log.d("MessageViewModel", message.toString());
                 }
@@ -118,7 +126,7 @@ public class MessageViewModel extends ViewModel {
 
     private void onNewMessageReceived(WebsocketMessageDTO websocketMessageDTO) {
         MessageDTO newMessage = gson.fromJson(gson.toJson(websocketMessageDTO.getPayload()), MessageDTO.class);
-        if ((!currentIsGroupChat && newMessage.getRecipientId() != null && newMessage.getRecipientId().equals(currentRecipientId)) ||
+        if ((!currentIsGroupChat && newMessage.getCreatorId() != null && newMessage.getCreatorId().equals(currentRecipientId)) ||
             (currentIsGroupChat && newMessage.getRecipientGroupId() != null && newMessage.getRecipientGroupId().equals(currentRecipientId)))
         {
             List<MessageDTO> currentList = fetchedMessages.getValue();

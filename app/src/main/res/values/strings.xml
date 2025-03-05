@@ -6,6 +6,9 @@
     <string name="login">Login</string>
     <string name="arrow_right"><![CDATA[>]]></string>
     <string name="arrow_left"><![CDATA[<]]></string>
+    <string name="phone">📞</string>
+    <string name="switch_camera">🔄</string>
+    <string name="mute">🔇</string>
     <string-array name="comment_filters">
         <item>Newest first</item>
         <item>Oldest first</item>

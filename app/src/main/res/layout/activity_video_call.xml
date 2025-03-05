@@ -1,33 +1,67 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:background="#C5BDDC">
 
-    <!-- Local SurfaceViewRenderer occupying the top half -->
-    <org.webrtc.SurfaceViewRenderer
-        android:id="@+id/local_surface_view"
+    <!-- Static Green Image Placeholder -->
+    <ImageView
+        android:id="@+id/static_green_image"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:scaleType="centerCrop"
+        android:background="@color/green"/>
 
-    <!-- Remote SurfaceViewRenderer occupying the bottom half -->
-    <org.webrtc.SurfaceViewRenderer
-        android:id="@+id/remote_surface_view"
+    <!-- Image Container -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
-
-    <Button
-        android:id="@+id/btn_make_call"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Make Call" />
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:weightSum="3">
 
-    <Button
-        android:id="@+id/btn_get_remote"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="get remote" />
+        <!-- Mute Image with Round Button -->
+        <ImageView
+            android:id="@+id/img_mute"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:contentDescription="@string/mute"
+            android:scaleType="centerCrop"
+            android:src="@drawable/microphone"
+            android:background="@drawable/round_button_2"
+            android:padding="16dp"
+            android:layout_marginEnd="40dp"
+            android:onClick="animateButton"/> <!-- Added margin to the left -->
+
+        <!-- Switch Camera Image with Round Button -->
+        <ImageView
+            android:id="@+id/img_switch_camera"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:contentDescription="@string/switch_camera"
+            android:scaleType="centerCrop"
+            android:src="@drawable/camera_rotate"
+            android:background="@drawable/round_button_2"
+            android:padding="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:onClick="animateButton"/> <!-- Added margin on both sides -->
+
+        <!-- Hangup Image with Round Button -->
+        <ImageView
+            android:id="@+id/img_hangup"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/phone_off"
+            android:background="@drawable/round_button_muted"
+            android:padding="16dp"
+            android:layout_marginStart="40dp"
+            android:onClick="animateButton"/> <!-- Added margin to the left -->
+
+    </LinearLayout>
+
 </LinearLayout>

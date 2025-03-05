@@ -6,17 +6,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Profile Picture -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/logout_button"
+        android:layout_width="54dp"
+        android:layout_height="62dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        app:icon="@drawable/logout"
+        app:iconGravity="textEnd"
+        app:iconSize="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/profile_image"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:src="@drawable/default_avatar"
+        android:src="@drawable/admin"
         android:scaleType="centerCrop"
+        android:clipToOutline="true"
+        android:layout_gravity="center"
+        android:background="@drawable/circle_border"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="32dp"/>
+        android:layout_marginTop="150dp"/>
 
     <!-- User Name Text -->
     <TextView
@@ -26,29 +40,20 @@
         android:text="John Doe"
         android:textSize="20sp"
         android:textColor="@android:color/black"
+        android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@id/profile_image"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Logout Button -->
+    <!-- Notification Button -->
     <Button
-        android:id="@+id/logout_button"
+        android:id="@+id/notif"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="216dp"
-        android:text="Logout"
+        android:text="notif"
+        android:layout_marginBottom="122dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/button_start_call"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Start Video Call"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logout_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

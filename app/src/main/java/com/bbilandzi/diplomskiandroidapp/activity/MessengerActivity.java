@@ -76,6 +76,12 @@ public class MessengerActivity extends AppCompatActivity {
             }
             return false;
         });
+
+        Button startCallButton = findViewById(R.id.callButton);
+        startCallButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MessengerActivity.this, VideoCallActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void displayMessages(List<MessageDTO> messages) {

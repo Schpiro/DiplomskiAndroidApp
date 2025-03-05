@@ -16,6 +16,8 @@ import com.bbilandzi.diplomskiandroidapp.adapter.EventAdapter;
 import com.bbilandzi.diplomskiandroidapp.fragments.CreateEventDialogFragment;
 import com.bbilandzi.diplomskiandroidapp.model.EventDTO;
 import com.bbilandzi.diplomskiandroidapp.viewmodel.EventViewModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 import java.util.ArrayList;
@@ -27,7 +29,7 @@ public class EventListActivity extends BaseActivity {
     private EventAdapter eventAdapter;
     private EventViewModel eventViewModel;
     private String selectedDate;
-    private Button createButton;
+    private FloatingActionButton createButton;
     private ImageView filter;
 
 

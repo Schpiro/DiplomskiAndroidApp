@@ -1,0 +1,7 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <solid android:color="#6A52A2"/> <!-- Change to your desired color -->
+    <size android:width="64dp" android:height="64dp"/> <!-- Ensure it's a square -->
+    <corners android:radius="32dp"/> <!-- Half of width/height to make a circle -->
+</shape>

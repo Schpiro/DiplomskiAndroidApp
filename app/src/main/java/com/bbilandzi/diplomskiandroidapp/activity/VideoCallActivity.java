@@ -3,8 +3,11 @@ package com.bbilandzi.diplomskiandroidapp.activity;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.PowerManager;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,38 +33,13 @@ public class VideoCallActivity extends BaseActivity {
     private SurfaceViewRenderer localRenderer;
     private SurfaceViewRenderer remoteRenderer;
     private Button makeCallButton;
-
-    private PowerManager.WakeLock wakeLock;
-
+    private ImageView muteButton;
+    private boolean isMuted = false; // Track mute state
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_call);
-        localRenderer = findViewById(R.id.local_surface_view);
-        remoteRenderer = findViewById(R.id.remote_surface_view);
-        makeCallButton = findViewById(R.id.btn_make_call);
-
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-                "Diplomski::VideoCallActive");
-        wakeLock.acquire(5 * 60 * 1000L);
-        this.webRTCManager = new WebRTCClient(this, new PeerConnectionObserver() {
-            @Override
-            public void onAddTrack(RtpReceiver receiver, MediaStream[] mediaStreams) {
-                super.onAddTrack(receiver, mediaStreams);
-                if (receiver.track() instanceof VideoTrack) {
-                    VideoTrack videoTrack = (VideoTrack) receiver.track();
-                    videoTrack.addSink(remoteRenderer);
-                }
-            }
-
-            @Override
-            public void onIceCandidate(IceCandidate iceCandidate) {
-                super.onIceCandidate(iceCandidate);
-                webRTCManager.sendIceCandidate(iceCandidate);
-            }
-        });
 
         if (!hasPermissions()) {
             ActivityCompat.requestPermissions(this, new String[]{
@@ -71,21 +49,34 @@ public class VideoCallActivity extends BaseActivity {
             }, REQUEST_PERMISSIONS);
         }
 
-        initialize();
+        muteButton = findViewById(R.id.img_mute); // Reference to mute button
+
+        // Set mute button click listener with animation
+        muteButton.setOnClickListener(v -> {
+            animateButton(v); // Apply animation
+            toggleMute(); // Toggle mute state
+        });
+        // Add hangup button reference
+        ImageView hangupButton = findViewById(R.id.img_hangup); // Reference to hangup button
+        hangupButton.setOnClickListener(v -> {
+            endCall();
+            animateButton(v);
+        });
     }
 
     @Override
     protected void onClose(Bundle savedInstanceState) {
-        wakeLock.release();
     }
 
     private void initialize() {
         initLocalView(localRenderer);
         initRemoteView(remoteRenderer);
 
-        makeCallButton.setOnClickListener(v->{
-            startCall("2");
-        });
+        makeCallButton.setOnClickListener(v -> startCall("2"));
+    }
+
+    private void endCall() {
+        finish();
     }
 
     private boolean hasPermissions() {
@@ -99,7 +90,6 @@ public class VideoCallActivity extends BaseActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_PERMISSIONS) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                initialize();
             } else {
                 Toast.makeText(this, "Permissions are required for WebRTC to work.", Toast.LENGTH_SHORT).show();
             }
@@ -118,4 +108,24 @@ public class VideoCallActivity extends BaseActivity {
         webRTCManager.call(target);
     }
 
+    // Toggle the mute state
+    private void toggleMute() {
+        isMuted = !isMuted;
+
+        if (isMuted) {
+            // Change image and background for mute
+            muteButton.setImageResource(R.drawable.microphone_off); // Set muted image
+            muteButton.setBackgroundResource(R.drawable.round_button_muted); // Set background for muted state
+        } else {
+            // Change image and background for unmute
+            muteButton.setImageResource(R.drawable.microphone); // Set unmuted image
+            muteButton.setBackgroundResource(R.drawable.round_button_2); // Set background for unmuted state
+        }
+    }
+
+    // Method to trigger animation on button click
+    public void animateButton(View v) {
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.button_click);
+        v.startAnimation(animation);
+    }
 }

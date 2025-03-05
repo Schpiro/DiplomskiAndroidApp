@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="@drawable/event_item_background">
+    android:background="@drawable/event_item_background"
+    android:layout_marginBottom="10dp">
 
     <!-- FrameLayout to contain title, date, location, and ">" arrow button -->
     <FrameLayout
@@ -49,7 +50,10 @@
             android:layout_gravity="end|center_vertical"
             android:background="@drawable/round_button_background"
             android:padding="8dp"
-            android:src="@drawable/ic_arrow_drawable"/>
+            android:paddingStart="13dp"
+            android:paddingEnd="9dp"
+            android:src="@drawable/ic_arrow_drawable"
+            android:backgroundTint="@color/purple"/>
     </FrameLayout>
 
     <!-- Additional details initially hidden -->
